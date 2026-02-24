@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const NAV_LINKS = [
   { label: 'Inicio',       href: '#inicio' },
@@ -15,6 +16,10 @@ export default function Navbar() {
   const [mobileOpen,   setMobileOpen]   = useState(false);
   const [activeLink,   setActiveLink]   = useState('#inicio');
 
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isLanding = location.pathname === '/';
+
   /* ── Detect scroll ── */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -29,8 +34,9 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  /* ── Active link via IntersectionObserver ── */
+  /* ── Active link via IntersectionObserver (only on landing) ── */
   useEffect(() => {
+    if (!isLanding) return;
     const sections = document.querySelectorAll('section[id]');
     const observer = new IntersectionObserver(
       (entries) => {
@@ -42,13 +48,33 @@ export default function Navbar() {
     );
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
-  }, []);
+  }, [isLanding]);
 
   const handleNavClick = (href) => {
     setActiveLink(href);
     setMobileOpen(false);
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
+
+    if (isLanding) {
+      // On landing page: smooth scroll to section
+      const target = document.querySelector(href);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // On other pages: navigate home then scroll
+      navigate('/');
+      setTimeout(() => {
+        const target = document.querySelector(href);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    }
+  };
+
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (isLanding) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+    }
   };
 
   return (
@@ -68,8 +94,8 @@ export default function Navbar() {
 
           {/* ── Logo ── */}
           <a
-            href="#inicio"
-            onClick={(e) => { e.preventDefault(); handleNavClick('#inicio'); }}
+            href="/"
+            onClick={handleLogoClick}
             className="flex items-center gap-2 shrink-0"
           >
             <div
@@ -93,11 +119,11 @@ export default function Navbar() {
                   onClick={(e) => { e.preventDefault(); handleNavClick(href); }}
                   className="nav-link"
                   style={{
-                    color: activeLink === href ? '#1FB6B9' : (scrolled ? '#1E1E1E' : '#1E1E1E'),
+                    color: (isLanding && activeLink === href) ? '#1FB6B9' : '#1E1E1E',
                   }}
                 >
                   {label}
-                  {activeLink === href && (
+                  {isLanding && activeLink === href && (
                     <span
                       style={{
                         position: 'absolute', bottom: '-2px', left: 0,
@@ -165,8 +191,8 @@ export default function Navbar() {
                   className="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all"
                   style={{
                     fontFamily: 'Inter, sans-serif',
-                    background: activeLink === href ? '#E8F9F9' : 'transparent',
-                    color: activeLink === href ? '#1FB6B9' : '#1E1E1E',
+                    background: (isLanding && activeLink === href) ? '#E8F9F9' : 'transparent',
+                    color: (isLanding && activeLink === href) ? '#1FB6B9' : '#1E1E1E',
                   }}
                 >
                   {label}
