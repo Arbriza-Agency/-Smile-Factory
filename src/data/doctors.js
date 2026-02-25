@@ -26,7 +26,7 @@ const DOCTORS = [
       'Seguimiento y control de alineaci\u00f3n',
     ],
     avatar:
-      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&q=85&auto=format&fit=crop&crop=face',
+      '/Dra. Lisselot Mixco de Brito.jpeg',
     stampText: 'Cirug\u00eda Dental \u00b7 Ortodoncia \u00b7 Invisalign \u00b7 ASO \u00b7 +10 a\u00f1os \u00b7 ',
     stampIcon: '\u2605',
     badge: 'Invisalign Certified',
@@ -54,7 +54,7 @@ const DOCTORS = [
       'Carillas y blanqueamientos',
     ],
     avatar:
-      'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=85&auto=format&fit=crop&crop=face',
+      '/Dr jose mixco.jpeg',
     stampText: 'Cirug\u00eda Dental \u00b7 Restaurativa \u00b7 Est\u00e9tica \u00b7 Preventiva \u00b7 ',
     stampIcon: '\u25c6',
     badge: 'Odont\u00f3logo General',

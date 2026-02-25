@@ -356,14 +356,14 @@ function AboutStyles() {
       .about-doctors-header { text-align: center; padding: 60px 20px 48px; }
 
       /* ── Page wrap ── */
-      .about-page-wrap { max-width: 1100px; margin: 0 auto; padding: 8px 20px 80px; display: flex; flex-direction: column; gap: 40px; }
+      .about-page-wrap { max-width: 1200px; margin: 0 auto; padding: 8px 20px 80px; display: flex; flex-direction: column; gap: 40px; }
 
       /* ── Marble card ── */
       .about-marble-card { position: relative; overflow: hidden; background-color: #ffffff; border-radius: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(31,182,185,0.06), 0 16px 48px rgba(31,182,185,0.08); transition: box-shadow 0.5s cubic-bezier(.22,1,.36,1); scroll-margin-top: 100px; }
       .about-marble-card:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 32px rgba(31,182,185,0.12), 0 28px 72px rgba(31,182,185,0.14); }
       .about-marble-card::before { content: ''; position: absolute; inset: 0; border-radius: 24px; background-image: repeating-linear-gradient(110deg, transparent 0, transparent 195px, rgba(31,182,185,0.025) 195px, rgba(31,182,185,0.025) 196px, transparent 196px, transparent 350px), radial-gradient(ellipse at 68% 42%, rgba(31,182,185,0.06) 0%, transparent 56%), radial-gradient(ellipse at 14% 82%, rgba(31,182,185,0.03) 0%, transparent 46%); pointer-events: none; z-index: 0; }
 
-      .about-card-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 380px 1fr; align-items: center; min-height: 560px; }
+      .about-card-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 440px 1fr; align-items: center; min-height: 560px; }
       @media (max-width: 880px) { .about-card-inner { grid-template-columns: 1fr; min-height: unset; } }
 
       /* ── Photo side ── */
@@ -371,9 +371,9 @@ function AboutStyles() {
       @media (max-width: 880px) { .about-photo-side { padding: 48px 48px 24px; } }
       @media (max-width: 520px) { .about-photo-side { padding: 36px 24px 20px; } }
 
-      .about-photo-frame { position: relative; width: 100%; max-width: 320px; transform-style: preserve-3d; transition: transform 0.18s linear; opacity: 0; transform: translateX(-24px); }
+      .about-photo-frame { position: relative; width: 100%; max-width: 380px; transform-style: preserve-3d; transition: transform 0.18s linear; opacity: 0; transform: translateX(-24px); }
       .about-card-vis .about-photo-frame { opacity: 1; transform: translateX(0) rotateY(0) rotateX(0); transition: opacity 0.9s cubic-bezier(.22,1,.36,1) 0.06s, transform 0.9s cubic-bezier(.22,1,.36,1) 0.06s; }
-      @media (max-width: 880px) { .about-photo-frame { max-width: 300px; } }
+      @media (max-width: 880px) { .about-photo-frame { max-width: 340px; } }
 
       .about-photo-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top center; border-radius: 18px; display: block; box-shadow: 0 2px 6px rgba(0,0,0,0.06), 0 10px 28px rgba(31,182,185,0.10), 0 24px 52px rgba(31,182,185,0.08); transition: box-shadow 0.4s cubic-bezier(.22,1,.36,1), filter 0.4s; }
       .about-marble-card:hover .about-photo-img { box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 18px 44px rgba(31,182,185,0.14), 0 40px 72px rgba(31,182,185,0.10); filter: brightness(1.03); }

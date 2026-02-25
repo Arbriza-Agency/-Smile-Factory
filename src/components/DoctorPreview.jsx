@@ -87,36 +87,30 @@ export default function DoctorPreview() {
             >
               {/* ── Photo side ── */}
               <div
-                className="relative overflow-hidden"
-                style={{ minHeight: '500px' }}
+                className="relative flex items-center justify-center"
+                style={{ padding: '32px 16px 32px 32px' }}
               >
-                <img
-                  src={doctor.avatar}
-                  alt={doctor.name}
-                  className="w-full h-full object-cover object-top"
-                  style={{ position: 'absolute', inset: 0 }}
-                />
-                {/* Overlay gradient for mobile */}
+                {/* Professional photo frame */}
                 <div
-                  className="absolute inset-0 md:hidden"
                   style={{
-                    background:
-                      'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 40%)',
-                  }}
-                />
-                {/* Specialty badge */}
-                <div
-                  className="absolute top-6 left-6 flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold"
-                  style={{
-                    background: 'rgba(31,182,185,0.9)',
-                    color: 'white',
-                    fontFamily: 'Poppins, sans-serif',
-                    backdropFilter: 'blur(8px)',
-                    letterSpacing: '0.03em',
+                    position: 'relative',
+                    width: '100%',
+                    maxWidth: '360px',
+                    borderRadius: '1.25rem',
+                    overflow: 'hidden',
+                    background: 'linear-gradient(160deg, #E8F9F9 0%, #F0FCFC 40%, #F5F7F8 100%)',
+                    boxShadow:
+                      '0 8px 32px rgba(31,182,185,0.12), 0 2px 8px rgba(0,0,0,0.05)',
                   }}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                  {doctor.specialty}
+                  <img
+                    src={doctor.avatar}
+                    alt={doctor.name}
+                    style={{
+                      width: '100%',
+                      display: 'block',
+                    }}
+                  />
                 </div>
               </div>
 
