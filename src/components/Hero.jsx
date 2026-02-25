@@ -1,24 +1,50 @@
 import { useEffect, useRef, useState } from 'react';
-import { Calendar, ChevronDown, Star, Users, Award, Clock } from 'lucide-react';
+import { Calendar, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const STATS = [
-  { icon: <Users size={20} />, value: '3,500+', label: 'Pacientes felices' },
-  { icon: <Award size={20} />, value: '12',     label: 'Años de experiencia' },
-  { icon: <Star  size={20} />, value: '4.9',    label: 'Calificación promedio' },
-  { icon: <Clock size={20} />, value: '98%',    label: 'Satisfacción' },
+const SLIDES = [
+  { src: '/slides/slide1.jpeg', alt: 'Equipo Smile Factory en recepción' },
+  { src: '/slides/slide2.jpeg', alt: 'Dentista atendiendo paciente' },
+  { src: '/slides/slide3.jpeg', alt: 'Equipo completo Smile Factory' },
+  
 ];
 
 export default function Hero() {
-  const textRef  = useRef(null);
-  const statsRef = useRef(null);
-  const [loaded, setLoaded] = useState(false);
+  const textRef = useRef(null);
+  const [loaded, setLoaded]   = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [prev, setPrev]       = useState(null);
   const navigate = useNavigate();
 
+  /* Fade-in inicial */
   useEffect(() => {
     const t = setTimeout(() => setLoaded(true), 100);
     return () => clearTimeout(t);
   }, []);
+
+  /* Precargar TODAS las imágenes al montar — fix clave */
+  useEffect(() => {
+    SLIDES.forEach((slide) => {
+      const img = new Image();
+      img.src = slide.src;
+    });
+  }, []);
+
+  /* Slideshow automático cada 5 s */
+  useEffect(() => {
+    const t = setInterval(() => {
+      setCurrent((c) => {
+        setPrev(c);
+        return (c + 1) % SLIDES.length;
+      });
+    }, 5000);
+    return () => clearInterval(t);
+  }, []);
+
+  const goTo = (i) => {
+    setPrev(current);
+    setCurrent(i);
+  };
 
   const scrollToServices = () => {
     document.querySelector('#servicios')?.scrollIntoView({ behavior: 'smooth' });
@@ -29,27 +55,47 @@ export default function Hero() {
       id="inicio"
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
-      {/* ── Background image ── */}
+      {/* Slideshow background */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1920&q=85&auto=format&fit=crop"
-          alt="Equipo dental profesional Smile Factory"
-          className="w-full h-full object-cover object-center"
-          loading="eager"
-        />
-        {/* Gradient overlay */}
+        {SLIDES.map((slide, i) => (
+          <div
+            key={i}
+            className="absolute inset-0"
+            style={{
+              opacity: i === current ? 1 : 0,
+              transition: 'opacity 1.2s ease-in-out',
+              zIndex: i === current ? 2 : i === prev ? 1 : 0,
+            }}
+          >
+            <img
+              src={slide.src}
+              alt={slide.alt}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                display: 'block',
+              }}
+            />
+          </div>
+        ))}
+
+        {/* Gradient overlay encima de todas las imágenes */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(135deg, rgba(14,140,143,0.90) 0%, rgba(31,182,185,0.70) 40%, rgba(10,30,40,0.75) 100%)',
+              'linear-gradient(135deg, rgba(14,140,143,0.88) 0%, rgba(31,182,185,0.68) 40%, rgba(10,30,40,0.78) 100%)',
+            zIndex: 3,
           }}
         />
       </div>
 
-      {/* ── Content ── */}
-      <div className="relative z-10 container-custom pt-28 pb-16">
+      {/* Content */}
+      <div className="relative z-10 container-custom pt-28 pb-20">
         <div className="max-w-3xl" ref={textRef}>
+
           {/* Badge */}
           <div
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 text-sm font-semibold transition-all duration-700"
@@ -106,8 +152,9 @@ export default function Hero() {
 
           {/* CTAs */}
           <div
-            className="flex flex-wrap gap-4 transition-all duration-700"
+            className="flex flex-wrap transition-all duration-700"
             style={{
+              gap: '24px',
               opacity: loaded ? 1 : 0,
               transform: loaded ? 'translateY(0)' : 'translateY(30px)',
               transitionDelay: '0.5s',
@@ -123,52 +170,45 @@ export default function Hero() {
             </button>
           </div>
         </div>
-
-        {/* ── Stats bar ── */}
-        <div
-          ref={statsRef}
-          className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 transition-all duration-700"
-          style={{
-            opacity: loaded ? 1 : 0,
-            transform: loaded ? 'translateY(0)' : 'translateY(40px)',
-            transitionDelay: '0.7s',
-          }}
-        >
-          {STATS.map(({ icon, value, label }, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-3 px-5 py-4 rounded-2xl"
-              style={{
-                background: 'rgba(255,255,255,0.12)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255,255,255,0.2)',
-              }}
-            >
-              <span style={{ color: '#A8E6E7' }}>{icon}</span>
-              <div>
-                <div
-                  className="text-white font-bold text-xl leading-none"
-                  style={{ fontFamily: 'Poppins, sans-serif' }}
-                >
-                  {value}
-                </div>
-                <div
-                  className="text-white/70 text-xs mt-0.5"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  {label}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
-      {/* ── Scroll indicator ── */}
+      {/* Slide dots */}
       <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 transition-all duration-700"
+        className="absolute z-10 flex gap-2.5"
+        style={{
+          bottom: '56px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          opacity: loaded ? 1 : 0,
+          transition: 'opacity 0.7s ease',
+          transitionDelay: '0.8s',
+        }}
+      >
+        {SLIDES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            aria-label={`Ir a imagen ${i + 1}`}
+            style={{
+              width: i === current ? '24px' : '8px',
+              height: '8px',
+              borderRadius: '999px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.35s ease',
+              background: i === current ? '#A8E6E7' : 'rgba(255,255,255,0.4)',
+              padding: 0,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
         style={{
           opacity: loaded ? 0.7 : 0,
+          transition: 'opacity 0.7s ease',
           transitionDelay: '1s',
           color: 'white',
         }}
@@ -176,10 +216,7 @@ export default function Hero() {
         <span className="text-xs tracking-widest" style={{ fontFamily: 'Inter, sans-serif' }}>
           SCROLL
         </span>
-        <div
-          className="w-px bg-white/50"
-          style={{ height: '40px', animation: 'none' }}
-        />
+        <div className="w-px bg-white/50" style={{ height: '36px' }} />
       </div>
     </section>
   );

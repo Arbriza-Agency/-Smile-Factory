@@ -41,81 +41,51 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
-  const [scrolled,    setScrolled]    = useState(false);
-  const [mobileOpen,  setMobileOpen]  = useState(false);
-  const [activeLink,  setActiveLink]  = useState('#inicio');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [contactoOpen, setContactoOpen] = useState(false);
+  const [scrolled,       setScrolled]       = useState(false);
+  const [mobileOpen,     setMobileOpen]     = useState(false);
+  const [activeLink,     setActiveLink]     = useState('#inicio');
+  const [dropdownOpen,   setDropdownOpen]   = useState(false);
+  const [contactoOpen,   setContactoOpen]   = useState(false);
   const [mobileNosotros, setMobileNosotros] = useState(false);
   const [mobileContacto, setMobileContacto] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef   = useRef(null);
   const dropdownTimer = useRef(null);
-  const contactoRef = useRef(null);
+  const contactoRef   = useRef(null);
   const contactoTimer = useRef(null);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location  = useLocation();
+  const navigate  = useNavigate();
   const isLanding = location.pathname === '/';
   const isAbout   = location.pathname === '/sobre-nosotros';
   const isContact = location.pathname === '/contacto';
 
-  /* ── Detect scroll ── */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* ── Close mobile menu on resize ── */
   useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 768) setMobileOpen(false);
-    };
+    const onResize = () => { if (window.innerWidth >= 768) setMobileOpen(false); };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  /* ── Active link via IntersectionObserver (only on landing) ── */
   useEffect(() => {
     if (!isLanding) return;
     const sections = document.querySelectorAll('section[id]');
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActiveLink(`#${e.target.id}`);
-        });
-      },
+      (entries) => { entries.forEach((e) => { if (e.isIntersecting) setActiveLink(`#${e.target.id}`); }); },
       { threshold: 0.35 }
     );
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
   }, [isLanding]);
 
-  const handleDropdownEnter = () => {
-    clearTimeout(dropdownTimer.current);
-    setDropdownOpen(true);
-  };
-
-  const handleDropdownLeave = () => {
-    dropdownTimer.current = setTimeout(() => setDropdownOpen(false), 200);
-  };
-
-  const handleContactoEnter = () => {
-    clearTimeout(contactoTimer.current);
-    setContactoOpen(true);
-  };
-
-  const handleContactoLeave = () => {
-    contactoTimer.current = setTimeout(() => setContactoOpen(false), 200);
-  };
-
-  const handleContactoItemClick = (item) => {
-    setContactoOpen(false);
-    setMobileOpen(false);
-    if (item.external) {
-      window.open(item.href, '_blank', 'noopener,noreferrer');
-    }
-  };
+  const handleDropdownEnter = () => { clearTimeout(dropdownTimer.current); setDropdownOpen(true); };
+  const handleDropdownLeave = () => { dropdownTimer.current = setTimeout(() => setDropdownOpen(false), 200); };
+  const handleContactoEnter = () => { clearTimeout(contactoTimer.current); setContactoOpen(true); };
+  const handleContactoLeave = () => { contactoTimer.current = setTimeout(() => setContactoOpen(false), 200); };
 
   const handleDropdownItemClick = (item) => {
     setDropdownOpen(false);
@@ -131,19 +101,8 @@ export default function Navbar() {
 
   const handleNavClick = (link) => {
     setMobileOpen(false);
-
-    if (link.type === 'route') {
-      navigate(link.href);
-      return;
-    }
-
-    if (link.type === 'dropdown') {
-      navigate(link.href);
-      return;
-    }
-
+    if (link.type === 'dropdown') { navigate(link.href); return; }
     setActiveLink(link.href);
-
     if (isLanding) {
       const target = document.querySelector(link.href);
       if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -158,11 +117,8 @@ export default function Navbar() {
 
   const handleLogoClick = (e) => {
     e.preventDefault();
-    if (isLanding) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      navigate('/');
-    }
+    if (isLanding) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else { navigate('/'); }
   };
 
   const isActive = (link) => {
@@ -176,7 +132,7 @@ export default function Navbar() {
       <style>{`
         .nav-dropdown {
           position: absolute;
-          top: calc(100% + 12px);
+          top: calc(100% + 14px);
           left: 50%;
           transform: translateX(-50%) translateY(8px);
           min-width: 260px;
@@ -184,8 +140,8 @@ export default function Navbar() {
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           border-radius: 16px;
-          box-shadow: 0 8px 40px rgba(31,182,185,0.12), 0 2px 8px rgba(0,0,0,0.04);
-          border: 1px solid rgba(31,182,185,0.08);
+          box-shadow: 0 8px 40px rgba(31,182,185,0.13), 0 2px 8px rgba(0,0,0,0.05);
+          border: 1px solid rgba(31,182,185,0.10);
           padding: 8px;
           opacity: 0;
           pointer-events: none;
@@ -215,175 +171,167 @@ export default function Navbar() {
           width: 100%;
           text-align: left;
         }
-        .nav-dropdown-item:hover {
-          background: #E8F9F9;
-          color: #1FB6B9;
-        }
+        .nav-dropdown-item:hover { background: #E8F9F9; color: #1FB6B9; }
         .nav-dropdown-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          background: #F3FAFA;
-          color: #1FB6B9;
-          display: flex;
+          width: 32px; height: 32px; border-radius: 8px;
+          background: #F3FAFA; color: #1FB6B9;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0; transition: background 0.2s;
+        }
+        .nav-dropdown-item:hover .nav-dropdown-icon { background: #D1F2F3; }
+        .nav-dropdown-sep { height: 1px; background: rgba(31,182,185,0.08); margin: 4px 12px; }
+        .mobile-sub-items { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+        .mobile-sub-items.open { max-height: 300px; }
+
+        /* Nav link styles */
+        .nav-link-item {
+          position: relative;
+          font-family: 'Inter', sans-serif;
+          font-size: 14.5px;
+          font-weight: 500;
+          text-decoration: none;
+          padding: 6px 2px;
+          transition: color 0.2s ease;
+          display: inline-flex;
           align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          transition: background 0.2s;
+          gap: 4px;
+          cursor: pointer;
+          background: none;
+          border: none;
         }
-        .nav-dropdown-item:hover .nav-dropdown-icon {
-          background: #D1F2F3;
+        .nav-link-item::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0;
+          width: 0; height: 2px;
+          background: #1FB6B9;
+          border-radius: 999px;
+          transition: width 0.25s ease;
         }
-        .nav-dropdown-sep {
-          height: 1px;
-          background: rgba(31,182,185,0.08);
-          margin: 4px 12px;
-        }
-        .mobile-sub-items {
-          overflow: hidden;
-          max-height: 0;
-          transition: max-height 0.3s ease;
-        }
-        .mobile-sub-items.open {
-          max-height: 300px;
-        }
+        .nav-link-item:hover::after,
+        .nav-link-item.active::after { width: 100%; }
+        .nav-link-item:hover { color: #1FB6B9 !important; }
       `}</style>
 
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: scrolled
-            ? 'rgba(255,255,255,0.95)'
-            : 'rgba(255,255,255,0)',
-          backdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
-          boxShadow: scrolled ? '0 1px 20px rgba(31,182,185,0.08)' : 'none',
+          background: scrolled ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0)',
+          backdropFilter: scrolled ? 'blur(20px) saturate(1.3)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.3)' : 'none',
+          boxShadow: scrolled ? '0 1px 24px rgba(31,182,185,0.10), 0 1px 4px rgba(0,0,0,0.04)' : 'none',
         }}
       >
         <div className="container-custom">
-          <nav className="flex items-center justify-between py-5">
+          <nav
+            className="flex items-center justify-between"
+            style={{ paddingTop: '18px', paddingBottom: '18px' }}
+          >
 
             {/* ── Logo ── */}
             <a
               href="/"
               onClick={handleLogoClick}
-              className="flex items-center gap-2.5 shrink-0 group"
+              className="flex items-center shrink-0 group"
+              style={{ textDecoration: 'none' }}
             >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg font-black shadow-md transition-transform duration-200 group-hover:scale-105"
-                style={{ background: 'linear-gradient(135deg,#1FB6B9,#0E8C8F)' }}
-              >
-                ✦
-              </div>
-              <span
-                className="font-black text-xl tracking-tight"
-                style={{ fontFamily: 'Poppins, sans-serif' }}
-              >
-                <span style={{ color: '#1FB6B9' }}>Smile</span>
-                <span style={{ color: '#1E1E1E' }}> Factory</span>
-              </span>
+              <img
+                src="/logo1.png"
+                alt="Smile Factory — Ortodoncia y Estudio Dental"
+                style={{
+                  height: '80px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  /* El logo tiene fondo negro — lo filtramos para que se vea
+                     bien sobre el navbar transparente y el fondo blanco */
+                  filter: scrolled
+                    ? 'brightness(0) saturate(100%) invert(56%) sepia(72%) saturate(421%) hue-rotate(143deg) brightness(93%) contrast(92%)'
+                    : 'brightness(0) invert(1)',
+                  transition: 'filter 0.3s ease, transform 0.2s ease',
+                  transform: 'scale(1)',
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+              />
             </a>
 
             {/* ── Desktop links ── */}
-            <ul className="hidden md:flex items-center gap-9">
+            <ul className="hidden md:flex items-center gap-10" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {NAV_LINKS.map((link) => {
                 const isNosotros = link.label === 'Nosotros';
                 const isContacto = link.label === 'Contacto';
                 const isDropdown = link.type === 'dropdown';
+                const active     = isActive(link);
 
                 return (
-                <li
-                  key={link.label}
-                  className="relative"
-                  onMouseEnter={isNosotros ? handleDropdownEnter : isContacto ? handleContactoEnter : undefined}
-                  onMouseLeave={isNosotros ? handleDropdownLeave : isContacto ? handleContactoLeave : undefined}
-                  ref={isNosotros ? dropdownRef : isContacto ? contactoRef : undefined}
-                >
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (!isDropdown) handleNavClick(link);
-                    }}
-                    className="nav-link"
-                    style={{
-                      color: isActive(link) ? '#1FB6B9' : '#1E1E1E',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
+                  <li
+                    key={link.label}
+                    style={{ position: 'relative' }}
+                    onMouseEnter={isNosotros ? handleDropdownEnter : isContacto ? handleContactoEnter : undefined}
+                    onMouseLeave={isNosotros ? handleDropdownLeave : isContacto ? handleContactoLeave : undefined}
+                    ref={isNosotros ? dropdownRef : isContacto ? contactoRef : undefined}
                   >
-                    {link.label}
-                    {isDropdown && (
-                      <ChevronDown
-                        size={14}
-                        style={{
-                          transition: 'transform 0.25s ease',
-                          transform: (isNosotros && dropdownOpen) || (isContacto && contactoOpen) ? 'rotate(180deg)' : 'none',
-                        }}
-                      />
-                    )}
-                    {isActive(link) && (
-                      <span
-                        style={{
-                          position: 'absolute',
-                          bottom: '-4px',
-                          left: 0,
-                          width: '100%',
-                          height: '2px',
-                          background: '#1FB6B9',
-                          borderRadius: '9999px',
-                        }}
-                      />
-                    )}
-                  </a>
+                    <a
+                      href={link.href}
+                      onClick={(e) => { e.preventDefault(); if (!isDropdown) handleNavClick(link); }}
+                      className={`nav-link-item${active ? ' active' : ''}`}
+                      style={{ color: active ? '#1FB6B9' : scrolled ? '#1E1E1E' : 'white' }}
+                    >
+                      {link.label}
+                      {isDropdown && (
+                        <ChevronDown
+                          size={14}
+                          style={{
+                            transition: 'transform 0.25s ease',
+                            transform: (isNosotros && dropdownOpen) || (isContacto && contactoOpen) ? 'rotate(180deg)' : 'none',
+                          }}
+                        />
+                      )}
+                    </a>
 
-                  {/* Dropdown for Nosotros */}
-                  {isNosotros && (
-                    <div className={`nav-dropdown${dropdownOpen ? ' open' : ''}`}>
-                      {NOSOTROS_ITEMS.map((item, i) => (
-                        <div key={item.label}>
-                          {i === NOSOTROS_ITEMS.length - 1 && <div className="nav-dropdown-sep" />}
-                          <button
-                            className="nav-dropdown-item"
-                            onClick={() => handleDropdownItemClick(item)}
-                          >
-                            <span className="nav-dropdown-icon">{item.icon}</span>
-                            {item.label}
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Dropdown for Contacto */}
-                  {isContacto && (
-                    <div className={`nav-dropdown${contactoOpen ? ' open' : ''}`}>
-                      {CONTACTO_ITEMS.map((item, i) => (
-                        <div key={item.label}>
-                          {i > 0 && <div className="nav-dropdown-sep" />}
-                          <a
-                            href={item.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="nav-dropdown-item"
-                            onClick={() => setContactoOpen(false)}
-                          >
-                            <span className="nav-dropdown-icon">{item.icon}</span>
-                            <span>
+                    {/* Dropdown Nosotros */}
+                    {isNosotros && (
+                      <div className={`nav-dropdown${dropdownOpen ? ' open' : ''}`}>
+                        {NOSOTROS_ITEMS.map((item, i) => (
+                          <div key={item.label}>
+                            {i === NOSOTROS_ITEMS.length - 1 && <div className="nav-dropdown-sep" />}
+                            <button className="nav-dropdown-item" onClick={() => handleDropdownItemClick(item)}>
+                              <span className="nav-dropdown-icon">{item.icon}</span>
                               {item.label}
-                              {item.subtitle && (
-                                <span style={{ display: 'block', fontSize: '11px', color: '#9CA3AF', fontWeight: 400 }}>
-                                  {item.subtitle}
-                                </span>
-                              )}
-                            </span>
-                          </a>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </li>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Dropdown Contacto */}
+                    {isContacto && (
+                      <div className={`nav-dropdown${contactoOpen ? ' open' : ''}`}>
+                        {CONTACTO_ITEMS.map((item, i) => (
+                          <div key={item.label}>
+                            {i > 0 && <div className="nav-dropdown-sep" />}
+                            <a
+                              href={item.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="nav-dropdown-item"
+                              onClick={() => setContactoOpen(false)}
+                            >
+                              <span className="nav-dropdown-icon">{item.icon}</span>
+                              <span>
+                                {item.label}
+                                {item.subtitle && (
+                                  <span style={{ display: 'block', fontSize: '11px', color: '#9CA3AF', fontWeight: 400 }}>
+                                    {item.subtitle}
+                                  </span>
+                                )}
+                              </span>
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </li>
                 );
               })}
             </ul>
@@ -392,15 +340,20 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-5">
               <a
                 href="tel:+50322724043"
-                className="flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-80"
-                style={{ color: '#1FB6B9', fontFamily: 'Inter, sans-serif' }}
+                className="flex items-center gap-2 text-sm font-medium transition-all hover:opacity-75"
+                style={{
+                  color: scrolled ? '#1FB6B9' : 'white',
+                  fontFamily: 'Inter, sans-serif',
+                  textDecoration: 'none',
+                  transition: 'color 0.3s ease, opacity 0.2s ease',
+                }}
               >
                 <Phone size={15} />
                 <span>2272-4043</span>
               </a>
               <Link
                 to="/contacto"
-                className="btn-primary text-sm"
+                className="btn-primary"
                 style={{ padding: '0.65rem 1.6rem', fontSize: '0.85rem' }}
               >
                 Agendar Cita
@@ -412,8 +365,8 @@ export default function Navbar() {
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden w-10 h-10 rounded-xl flex items-center justify-center transition-colors"
               style={{
-                background: mobileOpen ? '#E8F9F9' : 'transparent',
-                color: '#1E1E1E',
+                background: mobileOpen ? '#E8F9F9' : 'rgba(255,255,255,0.15)',
+                color: scrolled ? '#1E1E1E' : 'white',
                 border: 'none',
                 cursor: 'pointer',
               }}
@@ -434,45 +387,29 @@ export default function Navbar() {
           }}
         >
           <div className="container-custom pb-6 pt-3">
-            <ul className="flex flex-col gap-1.5 mb-6">
+            <ul className="flex flex-col gap-1.5 mb-6" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
                   {link.type === 'dropdown' && link.label === 'Nosotros' ? (
                     <>
                       <button
                         onClick={() => setMobileNosotros(!mobileNosotros)}
-                        className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-sm font-medium transition-all"
+                        className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-sm font-medium"
                         style={{
                           fontFamily: 'Inter, sans-serif',
                           background: isActive(link) ? '#E8F9F9' : 'transparent',
                           color: isActive(link) ? '#1FB6B9' : '#1E1E1E',
-                          border: 'none',
-                          cursor: 'pointer',
+                          border: 'none', cursor: 'pointer',
                         }}
                       >
                         {link.label}
-                        <ChevronDown
-                          size={16}
-                          style={{
-                            transition: 'transform 0.25s',
-                            transform: mobileNosotros ? 'rotate(180deg)' : 'none',
-                          }}
-                        />
+                        <ChevronDown size={16} style={{ transition: 'transform 0.25s', transform: mobileNosotros ? 'rotate(180deg)' : 'none' }} />
                       </button>
                       <div className={`mobile-sub-items${mobileNosotros ? ' open' : ''}`}>
                         {NOSOTROS_ITEMS.map((item) => (
-                          <button
-                            key={item.label}
-                            onClick={() => handleDropdownItemClick(item)}
-                            className="flex items-center gap-3 w-full px-8 py-3 text-sm transition-all"
-                            style={{
-                              fontFamily: 'Inter, sans-serif',
-                              color: '#6B7280',
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer',
-                              textAlign: 'left',
-                            }}
+                          <button key={item.label} onClick={() => handleDropdownItemClick(item)}
+                            className="flex items-center gap-3 w-full px-8 py-3 text-sm"
+                            style={{ fontFamily: 'Inter, sans-serif', color: '#6B7280', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
                           >
                             <span style={{ color: '#1FB6B9' }}>{item.icon}</span>
                             {item.label}
@@ -484,46 +421,29 @@ export default function Navbar() {
                     <>
                       <button
                         onClick={() => setMobileContacto(!mobileContacto)}
-                        className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-sm font-medium transition-all"
+                        className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-sm font-medium"
                         style={{
                           fontFamily: 'Inter, sans-serif',
                           background: isActive(link) ? '#E8F9F9' : 'transparent',
                           color: isActive(link) ? '#1FB6B9' : '#1E1E1E',
-                          border: 'none',
-                          cursor: 'pointer',
+                          border: 'none', cursor: 'pointer',
                         }}
                       >
                         {link.label}
-                        <ChevronDown
-                          size={16}
-                          style={{
-                            transition: 'transform 0.25s',
-                            transform: mobileContacto ? 'rotate(180deg)' : 'none',
-                          }}
-                        />
+                        <ChevronDown size={16} style={{ transition: 'transform 0.25s', transform: mobileContacto ? 'rotate(180deg)' : 'none' }} />
                       </button>
                       <div className={`mobile-sub-items${mobileContacto ? ' open' : ''}`}>
                         {CONTACTO_ITEMS.map((item) => (
-                          <a
-                            key={item.label}
-                            href={item.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer"
                             onClick={() => setMobileOpen(false)}
-                            className="flex items-center gap-3 w-full px-8 py-3 text-sm transition-all"
-                            style={{
-                              fontFamily: 'Inter, sans-serif',
-                              color: '#6B7280',
-                              textDecoration: 'none',
-                            }}
+                            className="flex items-center gap-3 w-full px-8 py-3 text-sm"
+                            style={{ fontFamily: 'Inter, sans-serif', color: '#6B7280', textDecoration: 'none' }}
                           >
                             <span style={{ color: '#1FB6B9' }}>{item.icon}</span>
                             <span>
                               {item.label}
                               {item.subtitle && (
-                                <span style={{ marginLeft: '6px', fontSize: '12px', color: '#9CA3AF' }}>
-                                  {item.subtitle}
-                                </span>
+                                <span style={{ marginLeft: '6px', fontSize: '12px', color: '#9CA3AF' }}>{item.subtitle}</span>
                               )}
                             </span>
                           </a>
@@ -531,17 +451,13 @@ export default function Navbar() {
                       </div>
                     </>
                   ) : (
-                    <a
-                      href={link.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleNavClick(link);
-                      }}
-                      className="flex items-center px-4 py-3.5 rounded-xl text-sm font-medium transition-all"
+                    <a href={link.href} onClick={(e) => { e.preventDefault(); handleNavClick(link); }}
+                      className="flex items-center px-4 py-3.5 rounded-xl text-sm font-medium"
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         background: isActive(link) ? '#E8F9F9' : 'transparent',
                         color: isActive(link) ? '#1FB6B9' : '#1E1E1E',
+                        textDecoration: 'none',
                       }}
                     >
                       {link.label}
@@ -550,11 +466,7 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/contacto"
-              onClick={() => setMobileOpen(false)}
-              className="btn-primary w-full justify-center"
-            >
+            <Link to="/contacto" onClick={() => setMobileOpen(false)} className="btn-primary w-full justify-center">
               Agendar Cita
             </Link>
           </div>
