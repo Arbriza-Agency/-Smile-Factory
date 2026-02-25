@@ -85,6 +85,12 @@ function DoctorCard({ doctor }) {
               </li>
             ))}
           </ul>
+          <p className="about-creds-label">Areas de Enfoque</p>
+          <div className="about-areas-wrap">
+            {doctor.areas.map((area, i) => (
+              <span key={i} className="about-area-tag">{area}</span>
+            ))}
+          </div>
           <div className="about-cta-wrap">
             <Link to="/contacto" className="about-cta-btn" aria-label={`Agendar cita con ${doctor.name}`}>
               <Calendar size={14} />
@@ -357,7 +363,7 @@ function AboutStyles() {
       .about-marble-card:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 32px rgba(31,182,185,0.12), 0 28px 72px rgba(31,182,185,0.14); }
       .about-marble-card::before { content: ''; position: absolute; inset: 0; border-radius: 24px; background-image: repeating-linear-gradient(110deg, transparent 0, transparent 195px, rgba(31,182,185,0.025) 195px, rgba(31,182,185,0.025) 196px, transparent 196px, transparent 350px), radial-gradient(ellipse at 68% 42%, rgba(31,182,185,0.06) 0%, transparent 56%), radial-gradient(ellipse at 14% 82%, rgba(31,182,185,0.03) 0%, transparent 46%); pointer-events: none; z-index: 0; }
 
-      .about-card-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 320px 1fr; align-items: center; min-height: 520px; }
+      .about-card-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 380px 1fr; align-items: center; min-height: 560px; }
       @media (max-width: 880px) { .about-card-inner { grid-template-columns: 1fr; min-height: unset; } }
 
       /* ── Photo side ── */
@@ -365,7 +371,7 @@ function AboutStyles() {
       @media (max-width: 880px) { .about-photo-side { padding: 48px 48px 24px; } }
       @media (max-width: 520px) { .about-photo-side { padding: 36px 24px 20px; } }
 
-      .about-photo-frame { position: relative; width: 100%; max-width: 280px; transform-style: preserve-3d; transition: transform 0.18s linear; opacity: 0; transform: translateX(-24px); }
+      .about-photo-frame { position: relative; width: 100%; max-width: 320px; transform-style: preserve-3d; transition: transform 0.18s linear; opacity: 0; transform: translateX(-24px); }
       .about-card-vis .about-photo-frame { opacity: 1; transform: translateX(0) rotateY(0) rotateX(0); transition: opacity 0.9s cubic-bezier(.22,1,.36,1) 0.06s, transform 0.9s cubic-bezier(.22,1,.36,1) 0.06s; }
       @media (max-width: 880px) { .about-photo-frame { max-width: 300px; } }
 
@@ -394,7 +400,9 @@ function AboutStyles() {
       .about-card-vis .about-info-side > *:nth-child(4) { transition-delay: 0.32s; }
       .about-card-vis .about-info-side > *:nth-child(5) { transition-delay: 0.39s; }
       .about-card-vis .about-info-side > *:nth-child(6) { transition-delay: 0.46s; }
-      .about-card-vis .about-info-side > *:nth-child(7) { transition-delay: 0.54s; }
+      .about-card-vis .about-info-side > *:nth-child(7) { transition-delay: 0.52s; }
+      .about-card-vis .about-info-side > *:nth-child(8) { transition-delay: 0.58s; }
+      .about-card-vis .about-info-side > *:nth-child(9) { transition-delay: 0.64s; }
       .about-card-vis .about-info-side > * { opacity: 1; transform: none; }
 
       .about-doc-name { font-family: 'Poppins', sans-serif; font-size: clamp(1.6rem, 2.8vw, 2.2rem); font-weight: 700; color: #1E1E1E; line-height: 1.2; margin-bottom: 12px; position: relative; display: inline-block; }
@@ -408,7 +416,13 @@ function AboutStyles() {
       .about-doc-bio { font-family: 'Inter', sans-serif; font-size: 14.5px; font-weight: 400; line-height: 1.9; color: #6B7280; margin-bottom: 28px; max-width: 560px; }
       .about-creds-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #9CA3AF; margin-bottom: 14px; }
 
-      .about-creds-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+      .about-creds-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+
+      /* Areas of focus tags */
+      .about-areas-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+      .about-area-tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 500; color: #0E8C8F; background: #E8F9F9; padding: 6px 14px; border-radius: 9999px; transition: background 0.2s, color 0.2s, transform 0.2s; }
+      .about-area-tag:hover { background: #1FB6B9; color: white; transform: translateY(-1px); }
+
       .about-cred-item { display: flex; align-items: flex-start; gap: 12px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 400; color: #6B7280; line-height: 1.6; opacity: 0; transform: translateX(-12px); transition: opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1), color 0.2s; }
       .about-card-vis .about-cred-item { opacity: 1; transform: none; }
       .about-card-vis .about-cred-item:nth-child(1) { transition-delay: 0.44s; }
