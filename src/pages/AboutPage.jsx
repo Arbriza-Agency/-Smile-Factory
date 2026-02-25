@@ -209,21 +209,21 @@ function IntroSection() {
           <div className="about-mosaic">
             <div className="about-mosaic-large">
               <img
-                src="https://images.unsplash.com/photo-1629909615184-74f495363b67?w=600&q=85&auto=format&fit=crop"
+                src="/Instalaciones 1.jpeg"
                 alt="Equipo Smile Factory"
                 loading="lazy"
               />
             </div>
             <div className="about-mosaic-small-top">
               <img
-                src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400&q=85&auto=format&fit=crop"
+                src="/instalaciones 2.jpeg"
                 alt="Consultorio moderno"
                 loading="lazy"
               />
             </div>
             <div className="about-mosaic-small-bottom">
               <img
-                src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=400&q=85&auto=format&fit=crop"
+                src="/team.jpeg"
                 alt="Tratamiento dental"
                 loading="lazy"
               />
@@ -237,12 +237,12 @@ function IntroSection() {
 
 /* ── Clinic Gallery Section (Instalaciones) ────────────────────── */
 const GALLERY_IMAGES = [
-  { src: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&q=80&auto=format&fit=crop', alt: 'Sala de espera moderna' },
-  { src: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=500&q=80&auto=format&fit=crop', alt: 'Area de tratamientos' },
-  { src: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&q=80&auto=format&fit=crop', alt: 'Equipo profesional' },
-  { src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&q=80&auto=format&fit=crop', alt: 'Tecnologia de punta' },
-  { src: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=500&q=80&auto=format&fit=crop', alt: 'Consultorios' },
-  { src: 'https://images.unsplash.com/photo-1551069613-1904dbdcda11?w=500&q=80&auto=format&fit=crop', alt: 'Recepcion' },
+  { src: '/espacio2.jpeg', alt: 'Sala de espera moderna' },
+  { src: '/espacio1.jpeg', alt: 'Area de tratamientos' },
+  { src: '/espacio3.jpeg', alt: 'Equipo profesional' },
+  { src: '/espacio4.jpeg', alt: 'Tecnologia de punta' },
+  { src: '/espacio5.jpeg', alt: 'Consultorios' },
+  { src: '/espacio6.jpeg', alt: 'Recepcion' },
 ];
 
 function ClinicGallery() {
