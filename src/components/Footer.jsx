@@ -61,19 +61,15 @@ export default function Footer() {
                 e.preventDefault();
                 handleLinkClick({ href: '#inicio', type: 'scroll' });
               }}
-              className="flex items-center gap-2 mb-6"
+              className="block mb-6"
               style={{ textDecoration: 'none' }}
             >
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-lg font-black"
-                style={{ background: 'linear-gradient(135deg,#1FB6B9,#0E8C8F)' }}
-              >
-                ✦
-              </div>
-              <span className="font-black text-xl" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                <span style={{ color: '#1FB6B9' }}>Smile</span>
-                <span style={{ color: '#E5E7EB' }}> Factory</span>
-              </span>
+              <img
+                src="/logo1.png"
+                alt="Smile Factory"
+                className="object-contain"
+                style={{ width: '180px', height: 'auto' }}
+              />
             </a>
             <p
               className="text-sm leading-relaxed"
@@ -281,6 +277,12 @@ export default function Footer() {
           >
             smilefactorysv@gmail.com
           </a>
+          <p
+            className="text-xs"
+            style={{ fontFamily: 'Inter, sans-serif', color: '#6B7280' }}
+          >
+            Dental Website by Arbriza Agency
+          </p>
         </div>
       </div>
     </footer>
