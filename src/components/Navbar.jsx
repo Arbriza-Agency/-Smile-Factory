@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Phone, ChevronDown, Heart, User, Building2 } from 'lucide-react';
+import { Menu, X, Phone, ChevronDown, Heart, User, Building2, MapPin, MessageCircle } from 'lucide-react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import DOCTORS from '../data/doctors';
 
@@ -10,11 +10,34 @@ const NOSOTROS_ITEMS = [
   { label: 'Instalaciones', href: '/sobre-nosotros#instalaciones', icon: <Building2 size={16} /> },
 ];
 
+const CONTACTO_ITEMS = [
+  {
+    label: 'Mapa',
+    href: 'https://maps.google.com/?q=Calle+Arturo+Ambrogi+137+Escalon+San+Salvador+El+Salvador',
+    icon: <MapPin size={16} />,
+    external: true,
+  },
+  {
+    label: 'Teléfonos',
+    href: 'tel:+50322724043',
+    icon: <Phone size={16} />,
+    external: true,
+    subtitle: '2272-4043',
+  },
+  {
+    label: 'WhatsApp',
+    href: 'https://wa.me/50378685669?text=%C2%A1Hola!%20Me%20gustar%C3%ADa%20agendar%20una%20cita%20en%20Smile%20Factory.',
+    icon: <MessageCircle size={16} />,
+    external: true,
+    subtitle: '7868-5669',
+  },
+];
+
 const NAV_LINKS = [
   { label: 'Inicio',    href: '#inicio',    type: 'scroll' },
   { label: 'Servicios', href: '#servicios', type: 'scroll' },
   { label: 'Nosotros',  href: '/sobre-nosotros', type: 'dropdown' },
-  { label: 'Contacto',  href: '/contacto',  type: 'route' },
+  { label: 'Contacto',  href: '/contacto',  type: 'dropdown' },
 ];
 
 export default function Navbar() {
@@ -22,9 +45,13 @@ export default function Navbar() {
   const [mobileOpen,  setMobileOpen]  = useState(false);
   const [activeLink,  setActiveLink]  = useState('#inicio');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [contactoOpen, setContactoOpen] = useState(false);
   const [mobileNosotros, setMobileNosotros] = useState(false);
+  const [mobileContacto, setMobileContacto] = useState(false);
   const dropdownRef = useRef(null);
   const dropdownTimer = useRef(null);
+  const contactoRef = useRef(null);
+  const contactoTimer = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -71,6 +98,23 @@ export default function Navbar() {
 
   const handleDropdownLeave = () => {
     dropdownTimer.current = setTimeout(() => setDropdownOpen(false), 200);
+  };
+
+  const handleContactoEnter = () => {
+    clearTimeout(contactoTimer.current);
+    setContactoOpen(true);
+  };
+
+  const handleContactoLeave = () => {
+    contactoTimer.current = setTimeout(() => setContactoOpen(false), 200);
+  };
+
+  const handleContactoItemClick = (item) => {
+    setContactoOpen(false);
+    setMobileOpen(false);
+    if (item.external) {
+      window.open(item.href, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const handleDropdownItemClick = (item) => {
@@ -122,8 +166,8 @@ export default function Navbar() {
   };
 
   const isActive = (link) => {
-    if (link.type === 'dropdown') return isAbout;
-    if (link.type === 'route' && link.href === '/contacto') return isContact;
+    if (link.label === 'Nosotros') return isAbout;
+    if (link.label === 'Contacto') return isContact;
     return isLanding && activeLink === link.href;
   };
 
@@ -242,19 +286,24 @@ export default function Navbar() {
 
             {/* ── Desktop links ── */}
             <ul className="hidden md:flex items-center gap-9">
-              {NAV_LINKS.map((link) => (
+              {NAV_LINKS.map((link) => {
+                const isNosotros = link.label === 'Nosotros';
+                const isContacto = link.label === 'Contacto';
+                const isDropdown = link.type === 'dropdown';
+
+                return (
                 <li
                   key={link.label}
                   className="relative"
-                  onMouseEnter={link.type === 'dropdown' ? handleDropdownEnter : undefined}
-                  onMouseLeave={link.type === 'dropdown' ? handleDropdownLeave : undefined}
-                  ref={link.type === 'dropdown' ? dropdownRef : undefined}
+                  onMouseEnter={isNosotros ? handleDropdownEnter : isContacto ? handleContactoEnter : undefined}
+                  onMouseLeave={isNosotros ? handleDropdownLeave : isContacto ? handleContactoLeave : undefined}
+                  ref={isNosotros ? dropdownRef : isContacto ? contactoRef : undefined}
                 >
                   <a
                     href={link.href}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleNavClick(link);
+                      if (!isDropdown) handleNavClick(link);
                     }}
                     className="nav-link"
                     style={{
@@ -265,12 +314,12 @@ export default function Navbar() {
                     }}
                   >
                     {link.label}
-                    {link.type === 'dropdown' && (
+                    {isDropdown && (
                       <ChevronDown
                         size={14}
                         style={{
                           transition: 'transform 0.25s ease',
-                          transform: dropdownOpen ? 'rotate(180deg)' : 'none',
+                          transform: (isNosotros && dropdownOpen) || (isContacto && contactoOpen) ? 'rotate(180deg)' : 'none',
                         }}
                       />
                     )}
@@ -290,7 +339,7 @@ export default function Navbar() {
                   </a>
 
                   {/* Dropdown for Nosotros */}
-                  {link.type === 'dropdown' && (
+                  {isNosotros && (
                     <div className={`nav-dropdown${dropdownOpen ? ' open' : ''}`}>
                       {NOSOTROS_ITEMS.map((item, i) => (
                         <div key={item.label}>
@@ -306,19 +355,48 @@ export default function Navbar() {
                       ))}
                     </div>
                   )}
+
+                  {/* Dropdown for Contacto */}
+                  {isContacto && (
+                    <div className={`nav-dropdown${contactoOpen ? ' open' : ''}`}>
+                      {CONTACTO_ITEMS.map((item, i) => (
+                        <div key={item.label}>
+                          {i > 0 && <div className="nav-dropdown-sep" />}
+                          <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="nav-dropdown-item"
+                            onClick={() => setContactoOpen(false)}
+                          >
+                            <span className="nav-dropdown-icon">{item.icon}</span>
+                            <span>
+                              {item.label}
+                              {item.subtitle && (
+                                <span style={{ display: 'block', fontSize: '11px', color: '#9CA3AF', fontWeight: 400 }}>
+                                  {item.subtitle}
+                                </span>
+                              )}
+                            </span>
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </li>
-              ))}
+                );
+              })}
             </ul>
 
             {/* ── Desktop CTA ── */}
             <div className="hidden md:flex items-center gap-5">
               <a
-                href="tel:+525512345678"
+                href="tel:+50322724043"
                 className="flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-80"
                 style={{ color: '#1FB6B9', fontFamily: 'Inter, sans-serif' }}
               >
                 <Phone size={15} />
-                <span>55 1234-5678</span>
+                <span>2272-4043</span>
               </a>
               <Link
                 to="/contacto"
@@ -359,7 +437,7 @@ export default function Navbar() {
             <ul className="flex flex-col gap-1.5 mb-6">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
-                  {link.type === 'dropdown' ? (
+                  {link.type === 'dropdown' && link.label === 'Nosotros' ? (
                     <>
                       <button
                         onClick={() => setMobileNosotros(!mobileNosotros)}
@@ -399,6 +477,56 @@ export default function Navbar() {
                             <span style={{ color: '#1FB6B9' }}>{item.icon}</span>
                             {item.label}
                           </button>
+                        ))}
+                      </div>
+                    </>
+                  ) : link.type === 'dropdown' && link.label === 'Contacto' ? (
+                    <>
+                      <button
+                        onClick={() => setMobileContacto(!mobileContacto)}
+                        className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-sm font-medium transition-all"
+                        style={{
+                          fontFamily: 'Inter, sans-serif',
+                          background: isActive(link) ? '#E8F9F9' : 'transparent',
+                          color: isActive(link) ? '#1FB6B9' : '#1E1E1E',
+                          border: 'none',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {link.label}
+                        <ChevronDown
+                          size={16}
+                          style={{
+                            transition: 'transform 0.25s',
+                            transform: mobileContacto ? 'rotate(180deg)' : 'none',
+                          }}
+                        />
+                      </button>
+                      <div className={`mobile-sub-items${mobileContacto ? ' open' : ''}`}>
+                        {CONTACTO_ITEMS.map((item) => (
+                          <a
+                            key={item.label}
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setMobileOpen(false)}
+                            className="flex items-center gap-3 w-full px-8 py-3 text-sm transition-all"
+                            style={{
+                              fontFamily: 'Inter, sans-serif',
+                              color: '#6B7280',
+                              textDecoration: 'none',
+                            }}
+                          >
+                            <span style={{ color: '#1FB6B9' }}>{item.icon}</span>
+                            <span>
+                              {item.label}
+                              {item.subtitle && (
+                                <span style={{ marginLeft: '6px', fontSize: '12px', color: '#9CA3AF' }}>
+                                  {item.subtitle}
+                                </span>
+                              )}
+                            </span>
+                          </a>
                         ))}
                       </div>
                     </>

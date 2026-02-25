@@ -6,22 +6,22 @@ const CONTACT_INFO = [
   {
     icon: <MapPin size={20} />,
     title: 'Direccion',
-    text: 'Av. Insurgentes Sur 1234, Col. Del Valle, CDMX',
+    text: 'Final Paseo Escalón, Calle Arturo Ambrogi #137, Escalón, San Salvador',
   },
   {
     icon: <Phone size={20} />,
     title: 'Telefono',
-    text: '55 1234-5678',
+    text: 'Oficina: 2272-4043 · WhatsApp: 7868-5669',
   },
   {
     icon: <Mail size={20} />,
     title: 'Correo',
-    text: 'citas@smilefactory.mx',
+    text: 'smilefactorysv@gmail.com',
   },
   {
     icon: <Clock size={20} />,
     title: 'Horario',
-    text: 'Lun-Vie: 9:00-20:00 · Sab: 9:00-14:00',
+    text: 'Lun-Vie: 8:00-5:00 · Sab: 8:00-2:00',
   },
 ];
 
@@ -61,7 +61,7 @@ export default function Contact() {
               <div className="relative overflow-hidden" style={{ minHeight: '360px' }}>
                 <iframe
                   title="Ubicacion Smile Factory"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.078!2d-99.1677!3d19.3909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff3a1234%3A0x5678!2sAv.+Insurgentes+Sur%2C+Ciudad+de+M%C3%A9xico!5e0!3m2!1ses!2smx!4v1700000000000"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.2!2d-89.2534!3d13.7002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f633067b0dfffff%3A0x0!2sCalle+Arturo+Ambrogi+137%2C+San+Salvador!5e0!3m2!1ses!2ssv!4v1700000000000"
                   style={{
                     position: 'absolute',
                     inset: 0,

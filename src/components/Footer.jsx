@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram, Facebook } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const QUICK_LINKS = [
@@ -9,32 +9,27 @@ const QUICK_LINKS = [
 ];
 
 const SERVICES_LINKS = [
-  { label: 'Brackets metálicos',  href: '#servicios' },
-  { label: 'Invisalign®',         href: '#servicios' },
-  { label: 'Brackets estéticos',  href: '#servicios' },
-  { label: 'Blanqueamiento',      href: '#servicios' },
-  { label: 'Implantes dentales',  href: '#servicios' },
-  { label: 'Limpieza dental',     href: '#servicios' },
+  { label: 'Limpiezas',           href: '#servicios' },
+  { label: 'Carillas',            href: '#servicios' },
+  { label: 'Brackets',            href: '#servicios' },
+  { label: 'Rellenos',            href: '#servicios' },
+  { label: 'Blanqueamientos',     href: '#servicios' },
+  { label: 'Endodoncia',          href: '#servicios' },
+  { label: 'Prótesis dentales',   href: '#servicios' },
 ];
 
 const SOCIAL = [
   {
     icon: <Instagram size={18} />,
-    href: 'https://instagram.com',
+    href: 'https://instagram.com/smilefactorysv',
     label: 'Instagram',
     color: '#E1306C',
   },
   {
     icon: <Facebook size={18} />,
-    href: 'https://facebook.com',
+    href: 'https://www.facebook.com/SmileFactorySv/',
     label: 'Facebook',
     color: '#1877F2',
-  },
-  {
-    icon: <Youtube size={18} />,
-    href: 'https://youtube.com',
-    label: 'YouTube',
-    color: '#FF0000',
   },
 ];
 
@@ -94,7 +89,7 @@ export default function Footer() {
               style={{ fontFamily: 'Inter, sans-serif', color: '#9CA3AF' }}
             >
               Clínica dental especializada en ortodoncia y odontología general.
-              Transformamos sonrisas con tecnología y corazón desde 2012.
+              Transformamos sonrisas con tecnología y corazón desde San Salvador.
             </p>
 
             {/* Social */}
@@ -186,27 +181,27 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="shrink-0 mt-0.5" style={{ color: '#1FB6B9' }} />
                 <span className="text-sm" style={{ fontFamily: 'Inter, sans-serif', color: '#9CA3AF' }}>
-                  Av. Insurgentes Sur 1234, Piso 3<br />Col. Del Valle, CDMX
+                  Final Paseo Escalón, Calle Arturo Ambrogi #137<br />Escalón, San Salvador, El Salvador
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} className="shrink-0" style={{ color: '#1FB6B9' }} />
                 <a
-                  href="tel:+525512345678"
+                  href="tel:+50322724043"
                   className="text-sm transition-colors hover:text-white"
                   style={{ fontFamily: 'Inter, sans-serif', color: '#9CA3AF' }}
                 >
-                  55 1234-5678
+                  2272-4043
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="shrink-0" style={{ color: '#1FB6B9' }} />
                 <a
-                  href="mailto:citas@smilefactory.mx"
+                  href="mailto:smilefactorysv@gmail.com"
                   className="text-sm transition-colors hover:text-white"
                   style={{ fontFamily: 'Inter, sans-serif', color: '#9CA3AF' }}
                 >
-                  citas@smilefactory.mx
+                  smilefactorysv@gmail.com
                 </a>
               </li>
             </ul>
@@ -259,7 +254,7 @@ export default function Footer() {
             className="text-xs"
             style={{ fontFamily: 'Inter, sans-serif', color: '#6B7280' }}
           >
-            Hecho con ❤️ en México
+            Hecho con ❤️ en El Salvador
           </p>
         </div>
       </div>
