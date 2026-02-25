@@ -35,14 +35,10 @@ export default function Contact() {
         {/* Header */}
         <div className="text-center mb-14 fade-up">
           <span className="section-badge">Contactanos</span>
-          <h2 className="section-title mx-auto">
+          <h2 className="section-title mx-auto" style={{ marginBottom: '3.5rem' }}>
             ¿Listo para tu{' '}
             <span style={{ color: '#1FB6B9' }}>nueva sonrisa?</span>
           </h2>
-          <p className="section-subtitle" style={{ margin: '0 auto', lineHeight: 1.85 }}>
-            Agenda tu consulta de diagnostico sin costo. Nuestro equipo te
-            contactara en menos de 2 horas.
-          </p>
         </div>
 
         {/* Content */}
