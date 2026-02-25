@@ -8,6 +8,7 @@ import {
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const SERVICES_OPTIONS = [
   'Limpiezas',
@@ -214,6 +215,55 @@ function ContactStyles() {
       }
       .contact-social-btn:hover { transform: translateY(-1px); }
 
+      /* ── Interactive enhancements ── */
+      .contact-btn-press:active { transform: scale(0.97) !important; }
+
+      .contact-submit-glow {
+        transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      }
+      .contact-submit-glow:hover {
+        box-shadow: 0 6px 28px rgba(31,182,185,0.45);
+      }
+
+      .contact-wa-cta:hover .contact-wa-arrow {
+        animation: contact-arrow-bounce 0.6s ease infinite;
+      }
+      @keyframes contact-arrow-bounce {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(5px); }
+      }
+
+      .contact-social-btn {
+        transition: transform 0.25s, box-shadow 0.25s;
+      }
+      .contact-social-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      }
+
+      .contact-info-icon { transition: transform 0.3s, background 0.3s; }
+      .contact-info-card:hover .contact-info-icon {
+        transform: scale(1.1);
+        background: #D1F5F5;
+      }
+
+      .contact-form-accent { position: relative; overflow: hidden; }
+      .contact-form-accent::before {
+        content: '';
+        position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+        width: 60px; height: 3px; border-radius: 9999px;
+        background: linear-gradient(90deg, #1FB6B9, #0E8C8F);
+      }
+
+      .contact-input {
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      }
+      .contact-input:focus {
+        border-color: #1FB6B9;
+        box-shadow: 0 0 0 3px rgba(31,182,185,0.12);
+        transform: translateY(-1px);
+      }
+
       @keyframes contact-anim-up {
         from { opacity: 0; transform: translateY(22px); }
         to { opacity: 1; transform: none; }
@@ -228,6 +278,8 @@ export default function ContactPage() {
   });
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const formRef = useScrollAnimation();
+  const infoRef = useScrollAnimation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -279,8 +331,8 @@ export default function ContactPage() {
       </header>
 
       {/* ── 2. Formulario + WhatsApp CTA ── */}
-      <div className="contact-form-section">
-        <div className="contact-form-card">
+      <div className="contact-form-section" ref={formRef}>
+        <div className="contact-form-card contact-form-accent fade-up">
           {sent ? (
             <div className="contact-success">
               <div className="contact-success-icon">
@@ -292,7 +344,7 @@ export default function ContactPage() {
                 contigo muy pronto para confirmar tu cita.
               </p>
               <button
-                className="btn-primary"
+                className="btn-primary contact-btn-press"
                 onClick={() => {
                   setSent(false);
                   setForm({ name: '', email: '', phone: '', service: '', message: '' });
@@ -380,7 +432,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary justify-center w-full"
+                className="btn-primary contact-btn-press contact-submit-glow justify-center w-full"
                 style={{ opacity: loading ? 0.8 : 1, marginTop: '0.5rem' }}
               >
                 {loading ? (
@@ -404,7 +456,7 @@ export default function ContactPage() {
           href="https://wa.me/50378685669?text=%C2%A1Hola!%20Me%20gustar%C3%ADa%20agendar%20una%20cita%20en%20Smile%20Factory."
           target="_blank"
           rel="noopener noreferrer"
-          className="contact-wa-cta"
+          className="contact-wa-cta fade-up stagger-2"
         >
           <div className="contact-wa-icon">
             <MessageCircle size={24} color="white" />
@@ -417,14 +469,14 @@ export default function ContactPage() {
               Metodo de contacto preferido y mas rapido. Escribenos al 7868-5669 y te atendemos de inmediato.
             </div>
           </div>
-          <ArrowRight size={20} color="white" style={{ flexShrink: 0 }} />
+          <ArrowRight size={20} color="white" className="contact-wa-arrow" style={{ flexShrink: 0 }} />
         </a>
       </div>
 
       {/* ── 3. Info + Mapa ── */}
-      <div className="contact-info-section">
+      <div className="contact-info-section" ref={infoRef}>
         {/* Map */}
-        <div className="contact-map-wrap">
+        <div className="contact-map-wrap fade-left">
           <iframe
             title="Ubicacion Smile Factory"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.2!2d-89.2534!3d13.7002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f633067b0dfffff%3A0x0!2sCalle+Arturo+Ambrogi+137%2C+San+Salvador!5e0!3m2!1ses!2ssv!4v1700000000000"
@@ -436,7 +488,7 @@ export default function ContactPage() {
         {/* Info cards */}
         <div className="contact-info-list">
           {/* Direccion */}
-          <div className="contact-info-card">
+          <div className="contact-info-card fade-right stagger-1">
             <div className="contact-info-icon"><MapPin size={20} /></div>
             <div>
               <div className="contact-info-title">Direccion</div>
@@ -446,7 +498,7 @@ export default function ContactPage() {
           </div>
 
           {/* Horarios */}
-          <div className="contact-info-card">
+          <div className="contact-info-card fade-right stagger-2">
             <div className="contact-info-icon"><Clock size={20} /></div>
             <div>
               <div className="contact-info-title">Horarios</div>
@@ -456,7 +508,7 @@ export default function ContactPage() {
           </div>
 
           {/* Telefonos */}
-          <div className="contact-info-card">
+          <div className="contact-info-card fade-right stagger-3">
             <div className="contact-info-icon"><Phone size={20} /></div>
             <div>
               <div className="contact-info-title">Telefonos</div>
@@ -470,7 +522,7 @@ export default function ContactPage() {
           </div>
 
           {/* Correo */}
-          <div className="contact-info-card">
+          <div className="contact-info-card fade-right stagger-4">
             <div className="contact-info-icon"><Mail size={20} /></div>
             <div>
               <div className="contact-info-title">Correo</div>
@@ -481,7 +533,7 @@ export default function ContactPage() {
           </div>
 
           {/* Redes sociales */}
-          <div className="contact-info-card">
+          <div className="contact-info-card fade-right stagger-5">
             <div className="contact-info-icon"><Instagram size={20} /></div>
             <div>
               <div className="contact-info-title">Redes sociales</div>
