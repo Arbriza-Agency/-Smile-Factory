@@ -20,13 +20,15 @@ export default function DoctorPreview() {
       setTimeout(() => {
         setCurrent(idx);
         setAnimating(false);
-      }, 350);
+      }, 400);
     },
     [animating]
   );
 
-  const prev = () => goTo(current === 0 ? DOCTORS.length - 1 : current - 1, 'left');
-  const next = () => goTo(current === DOCTORS.length - 1 ? 0 : current + 1, 'right');
+  const prev = () =>
+    goTo(current === 0 ? DOCTORS.length - 1 : current - 1, 'left');
+  const next = () =>
+    goTo(current === DOCTORS.length - 1 ? 0 : current + 1, 'right');
 
   /* Auto-advance every 8s */
   useEffect(() => {
@@ -36,69 +38,80 @@ export default function DoctorPreview() {
 
   const slideTransform = animating
     ? direction === 'right'
-      ? 'translateX(-40px)'
-      : 'translateX(40px)'
+      ? 'translateX(-50px)'
+      : 'translateX(50px)'
     : 'translateX(0)';
   const slideOpacity = animating ? 0 : 1;
 
   return (
-    <section id="doctores" className="section-padding" style={{ background: '#F5F7F8' }} ref={ref}>
+    <section
+      id="doctores"
+      className="section-padding"
+      style={{ background: '#F5F7F8' }}
+      ref={ref}
+    >
       <div className="container-custom">
 
         {/* Header */}
-        <div className="text-center mb-14 fade-up">
+        <div className="text-center mb-16 fade-up">
           <span className="section-badge">Nuestro Equipo</span>
-          <h2 className="section-title mx-auto">
+          <h2 className="section-title mx-auto" style={{ marginBottom: '1.25rem' }}>
             Conoce a nuestros{' '}
             <span style={{ color: '#1FB6B9' }}>especialistas</span>
           </h2>
-          <p className="section-subtitle" style={{ margin: '0 auto' }}>
+          <p className="section-subtitle" style={{ margin: '0 auto', lineHeight: 1.85 }}>
             Un equipo de profesionales altamente capacitados, comprometidos con
-            tu salud bucal y tu sonrisa.
+            tu salud bucal y la confianza de tu sonrisa.
           </p>
         </div>
 
-        {/* Doctor card carousel */}
+        {/* Doctor card carousel — bigger */}
         <div className="fade-up stagger-2">
           <div
-            className="relative overflow-hidden rounded-3xl"
+            className="relative overflow-hidden"
             style={{
+              borderRadius: '1.75rem',
               background: 'white',
-              boxShadow: '0 8px 40px rgba(31,182,185,0.10), 0 2px 8px rgba(0,0,0,0.04)',
+              boxShadow:
+                '0 8px 48px rgba(31,182,185,0.10), 0 2px 12px rgba(0,0,0,0.03)',
             }}
           >
             <div
               className="grid md:grid-cols-2 items-stretch"
               style={{
-                transition: 'opacity 0.35s ease, transform 0.35s ease',
+                transition: 'opacity 0.4s ease, transform 0.4s ease',
                 opacity: slideOpacity,
                 transform: slideTransform,
               }}
             >
-              {/* Photo side */}
-              <div className="relative overflow-hidden" style={{ minHeight: '380px' }}>
+              {/* ── Photo side ── */}
+              <div
+                className="relative overflow-hidden"
+                style={{ minHeight: '480px' }}
+              >
                 <img
                   src={doctor.avatar}
                   alt={doctor.name}
                   className="w-full h-full object-cover object-top"
                   style={{ position: 'absolute', inset: 0 }}
                 />
-                {/* Overlay gradient */}
+                {/* Overlay gradient for mobile */}
                 <div
                   className="absolute inset-0 md:hidden"
                   style={{
                     background:
-                      'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%)',
+                      'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 40%)',
                   }}
                 />
                 {/* Specialty badge */}
                 <div
-                  className="absolute top-5 left-5 flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold"
+                  className="absolute top-6 left-6 flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold"
                   style={{
                     background: 'rgba(31,182,185,0.9)',
                     color: 'white',
                     fontFamily: 'Poppins, sans-serif',
                     backdropFilter: 'blur(8px)',
+                    letterSpacing: '0.03em',
                   }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
@@ -106,15 +119,16 @@ export default function DoctorPreview() {
                 </div>
               </div>
 
-              {/* Info side */}
-              <div className="flex flex-col justify-center p-8 md:p-12">
-                {/* Role tag */}
+              {/* ── Info side ── */}
+              <div className="flex flex-col justify-center px-10 py-14 md:px-16 md:py-20">
+                {/* Role */}
                 <span
-                  className="text-xs font-semibold tracking-widest uppercase mb-3"
+                  className="text-xs font-semibold tracking-widest uppercase"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     color: '#1FB6B9',
-                    letterSpacing: '0.12em',
+                    letterSpacing: '0.14em',
+                    marginBottom: '1.25rem',
                   }}
                 >
                   {doctor.role}
@@ -122,12 +136,13 @@ export default function DoctorPreview() {
 
                 {/* Name */}
                 <h3
-                  className="font-bold mb-4"
+                  className="font-bold"
                   style={{
                     fontFamily: 'Poppins, sans-serif',
-                    fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                    fontSize: 'clamp(1.6rem, 3vw, 2.25rem)',
                     color: '#1E1E1E',
-                    lineHeight: 1.15,
+                    lineHeight: 1.2,
+                    marginBottom: '1.75rem',
                   }}
                 >
                   {doctor.name}
@@ -135,44 +150,35 @@ export default function DoctorPreview() {
 
                 {/* Hairline */}
                 <div
-                  className="w-full mb-5"
                   style={{
+                    width: '100%',
                     height: '2px',
-                    background: 'linear-gradient(to right, #1FB6B9, #E8F9F9, transparent)',
+                    background:
+                      'linear-gradient(to right, #1FB6B9, #E8F9F9, transparent)',
                     borderRadius: '9999px',
+                    marginBottom: '2rem',
                   }}
                 />
 
                 {/* Short bio */}
                 <p
-                  className="text-sm text-gray-500 leading-relaxed mb-6"
-                  style={{ fontFamily: 'Inter, sans-serif', maxWidth: '420px' }}
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '0.95rem',
+                    color: '#6B7280',
+                    lineHeight: 2,
+                    maxWidth: '440px',
+                    marginBottom: '2.5rem',
+                  }}
                 >
                   {doctor.shortBio}
                 </p>
-
-                {/* Credentials preview (first 3) */}
-                <ul className="flex flex-col gap-2 mb-8">
-                  {doctor.credentials.slice(0, 3).map((c, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
-                      <span
-                        className="w-1.5 h-1.5 rounded-full mt-2 shrink-0"
-                        style={{ background: '#1FB6B9' }}
-                      />
-                      <span
-                        className="text-sm text-gray-600"
-                        style={{ fontFamily: 'Inter, sans-serif', lineHeight: 1.6 }}
-                      >
-                        {c}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
 
                 {/* CTA – Sobre Nosotros */}
                 <Link
                   to="/sobre-nosotros"
                   className="btn-primary inline-flex self-start"
+                  style={{ padding: '0.85rem 2.2rem' }}
                 >
                   Sobre Nosotros
                   <ArrowRight size={16} />
@@ -180,21 +186,22 @@ export default function DoctorPreview() {
               </div>
             </div>
 
-            {/* Navigation arrows */}
-            <div className="absolute bottom-6 right-6 flex items-center gap-3 z-10">
+            {/* ── Navigation controls ── */}
+            <div className="absolute bottom-7 right-7 flex items-center gap-3 z-10">
               {/* Dots */}
-              <div className="flex gap-1.5 mr-2">
+              <div className="flex gap-2 mr-3">
                 {DOCTORS.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => goTo(i, i > current ? 'right' : 'left')}
                     className="transition-all rounded-full"
                     style={{
-                      width: i === current ? '20px' : '8px',
+                      width: i === current ? '24px' : '8px',
                       height: '8px',
-                      background: i === current
-                        ? 'linear-gradient(135deg,#1FB6B9,#0E8C8F)'
-                        : '#D1D5DB',
+                      background:
+                        i === current
+                          ? 'linear-gradient(135deg,#1FB6B9,#0E8C8F)'
+                          : '#D1D5DB',
                       border: 'none',
                       cursor: 'pointer',
                       padding: 0,
@@ -207,13 +214,13 @@ export default function DoctorPreview() {
               {/* Prev */}
               <button
                 onClick={prev}
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                className="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110"
                 style={{
                   background: 'white',
                   border: '1px solid #E5E7EB',
                   color: '#1E1E1E',
                   cursor: 'pointer',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
                 }}
                 aria-label="Doctor anterior"
               >
@@ -223,13 +230,13 @@ export default function DoctorPreview() {
               {/* Next */}
               <button
                 onClick={next}
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                className="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110"
                 style={{
                   background: 'linear-gradient(135deg,#1FB6B9,#0E8C8F)',
                   border: 'none',
                   color: 'white',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(31,182,185,0.35)',
+                  boxShadow: '0 4px 20px rgba(31,182,185,0.35)',
                 }}
                 aria-label="Siguiente doctor"
               >
@@ -239,9 +246,9 @@ export default function DoctorPreview() {
 
             {/* Counter */}
             <div
-              className="absolute top-5 right-5 px-3 py-1 rounded-full text-xs font-bold"
+              className="absolute top-6 right-6 px-4 py-1.5 rounded-full text-xs font-bold"
               style={{
-                background: 'rgba(255,255,255,0.9)',
+                background: 'rgba(255,255,255,0.92)',
                 color: '#6B7280',
                 fontFamily: 'Poppins, sans-serif',
                 backdropFilter: 'blur(4px)',
@@ -251,7 +258,6 @@ export default function DoctorPreview() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

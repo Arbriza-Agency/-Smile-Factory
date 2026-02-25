@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Calendar, ChevronDown, Star, Users, Award, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const STATS = [
   { icon: <Users size={20} />, value: '3,500+', label: 'Pacientes felices' },
@@ -12,6 +13,7 @@ export default function Hero() {
   const textRef  = useRef(null);
   const statsRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const t = setTimeout(() => setLoaded(true), 100);
@@ -20,10 +22,6 @@ export default function Hero() {
 
   const scrollToServices = () => {
     document.querySelector('#servicios')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const scrollToContact = () => {
-    document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -115,7 +113,7 @@ export default function Hero() {
               transitionDelay: '0.5s',
             }}
           >
-            <button onClick={scrollToContact} className="btn-primary">
+            <button onClick={() => navigate('/contacto')} className="btn-primary">
               <Calendar size={18} />
               Agendar Cita
             </button>

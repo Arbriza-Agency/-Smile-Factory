@@ -1,12 +1,11 @@
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const QUICK_LINKS = [
-  { label: 'Inicio',      href: '#inicio' },
-  { label: 'Nosotros',    href: '#nosotros' },
-  { label: 'Servicios',   href: '#servicios' },
-  { label: 'Galería',     href: '#galeria' },
-  { label: 'Testimonios', href: '#testimonios' },
-  { label: 'Contacto',    href: '#contacto' },
+  { label: 'Inicio',      href: '#inicio',          type: 'scroll' },
+  { label: 'Nosotros',    href: '/sobre-nosotros',  type: 'route'  },
+  { label: 'Servicios',   href: '#servicios',       type: 'scroll' },
+  { label: 'Contacto',    href: '/contacto',        type: 'route'  },
 ];
 
 const SERVICES_LINKS = [
@@ -45,6 +44,23 @@ const scroll = (href) => {
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLinkClick = (link) => {
+    if (link.type === 'route') {
+      navigate(link.href);
+      return;
+    }
+    if (location.pathname === '/') {
+      document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+      }, 200);
+    }
+  };
 
   return (
     <footer style={{ background: '#0D1117', color: '#E5E7EB' }}>
@@ -119,15 +135,15 @@ export default function Footer() {
               Navegación
             </h4>
             <ul className="flex flex-col gap-2.5">
-              {QUICK_LINKS.map(({ label, href }) => (
-                <li key={href}>
+              {QUICK_LINKS.map((link) => (
+                <li key={link.label}>
                   <a
-                    href={href}
-                    onClick={(e) => { e.preventDefault(); scroll(href); }}
+                    href={link.href}
+                    onClick={(e) => { e.preventDefault(); handleLinkClick(link); }}
                     className="text-sm transition-colors hover:text-white"
                     style={{ fontFamily: 'Inter, sans-serif', color: '#9CA3AF' }}
                   >
-                    {label}
+                    {link.label}
                   </a>
                 </li>
               ))}
@@ -196,9 +212,8 @@ export default function Footer() {
             </ul>
 
             {/* CTA */}
-            <a
-              href="#contacto"
-              onClick={(e) => { e.preventDefault(); scroll('#contacto'); }}
+            <Link
+              to="/contacto"
               className="inline-flex items-center gap-2 mt-6 text-sm font-semibold transition-all hover:opacity-90"
               style={{
                 background: 'linear-gradient(135deg,#1FB6B9,#0E8C8F)',
@@ -207,10 +222,11 @@ export default function Footer() {
                 borderRadius: '9999px',
                 fontFamily: 'Poppins, sans-serif',
                 boxShadow: '0 4px 16px rgba(31,182,185,0.35)',
+                textDecoration: 'none',
               }}
             >
               Agendar Cita
-            </a>
+            </Link>
           </div>
         </div>
       </div>

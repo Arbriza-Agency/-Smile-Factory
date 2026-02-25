@@ -1,4 +1,5 @@
 import { CheckCircle, Heart, Shield, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const VALUES = [
@@ -122,11 +123,10 @@ export default function AboutUs() {
               ))}
             </div>
 
-            <a href="#contacto" className="btn-primary inline-flex"
-               onClick={(e) => { e.preventDefault(); document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' }); }}>
+            <Link to="/contacto" className="btn-primary inline-flex">
               <CheckCircle size={18} />
               Agendar mi primera cita
-            </a>
+            </Link>
           </div>
         </div>
 

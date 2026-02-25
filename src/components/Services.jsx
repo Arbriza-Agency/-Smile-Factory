@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, CheckCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 /* ─── Data ──────────────────────────────────────────────────────────────── */
@@ -94,7 +95,7 @@ const GENERAL = [
 ];
 
 /* ─── Sub-components ────────────────────────────────────────────────────── */
-function ServiceCard({ emoji, title, desc, features, popular, delay }) {
+function ServiceCard({ emoji, title, desc, features, popular, delay, onContact }) {
   return (
     <div
       className={`fade-up stagger-${delay} card relative p-6 flex flex-col gap-3`}
@@ -133,7 +134,7 @@ function ServiceCard({ emoji, title, desc, features, popular, delay }) {
       <button
         className="mt-auto flex items-center gap-1.5 text-sm font-semibold pt-2 transition-all group"
         style={{ color: '#1FB6B9', fontFamily: 'Poppins, sans-serif', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-        onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })}
+        onClick={onContact}
       >
         Saber más
         <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
@@ -146,6 +147,9 @@ function ServiceCard({ emoji, title, desc, features, popular, delay }) {
 export default function Services() {
   const [activeTab, setActiveTab] = useState('ortodoncia');
   const ref = useScrollAnimation();
+  const navigate = useNavigate();
+
+  const goContact = () => navigate('/contacto');
 
   const currentServices = activeTab === 'ortodoncia' ? ORTHODONTICS : GENERAL;
 
@@ -206,6 +210,7 @@ export default function Services() {
               key={`${activeTab}-${i}`}
               {...service}
               delay={Math.min(i + 1, 6)}
+              onContact={goContact}
             />
           ))}
         </div>
@@ -217,7 +222,7 @@ export default function Services() {
           </p>
           <button
             className="btn-primary"
-            onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={goContact}
           >
             <CheckCircle size={18} />
             Agenda una consulta gratuita
