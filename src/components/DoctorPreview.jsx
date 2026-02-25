@@ -82,12 +82,13 @@ export default function DoctorPreview() {
                 transition: 'opacity 0.4s ease, transform 0.4s ease',
                 opacity: slideOpacity,
                 transform: slideTransform,
+                gap: '0 40px',
               }}
             >
               {/* ── Photo side ── */}
               <div
                 className="relative overflow-hidden"
-                style={{ minHeight: '480px' }}
+                style={{ minHeight: '500px' }}
               >
                 <img
                   src={doctor.avatar}
