@@ -95,100 +95,60 @@ const COLORS = {
 };
 
 const SERVICES = [
-  {
-    key: 'ortodoncia',
-    title: 'Ortodoncia',
-    short: 'Corregimos posición y mordida para una sonrisa perfecta.',
-    desc: 'Tratamientos especializados en corregir la posición de los dientes y la mordida para mejorar tanto la estética como la funcionalidad de la sonrisa. Incluye evaluaciones completas y seguimiento constante con especialista.',
-    popular: true,
-  },
-  {
-    key: 'limpieza',
-    title: 'Limpiezas Dentales',
-    short: 'Profilaxis profunda para dientes sanos y brillantes.',
-    desc: 'Limpieza profunda que elimina placa y sarro, previniendo caries y enfermedades de encías. Dejamos tus dientes más sanos, limpios y brillantes desde la primera sesión.',
-    popular: false,
-  },
-  {
-    key: 'relleno',
-    title: 'Rellenos de Resina',
-    short: 'Restauramos dientes con materiales del color natural.',
-    desc: 'Tratamientos restaurativos que reparan dientes con caries o fracturas usando materiales del color del diente. Resultados estéticos y funcionales que nadie notará.',
-    popular: false,
-  },
-  {
-    key: 'blanqueamiento',
-    title: 'Blanqueamiento Dental',
-    short: 'Hasta 8 tonos más blanco en una sola sesión.',
-    desc: 'Tratamiento estético que aclara el tono de los dientes para una sonrisa más radiante. Técnicas y materiales seguros con resultados visibles y naturales desde la primera cita.',
-    popular: true,
-  },
-  {
-    key: 'protesis',
-    title: 'Prótesis Dentales',
-    short: 'Soluciones fijas y removibles para dientes perdidos.',
-    desc: 'Sustituimos piezas dentales ausentes o dañadas con prótesis fijas o removibles de alta calidad, mejorando la función masticatoria y la estética dental de forma natural.',
-    popular: false,
-  },
-  {
-    key: 'extraccion',
-    title: 'Extracciones Dentales',
-    short: 'Procedimiento seguro, rápido y sin dolor.',
-    desc: 'Extracción de dientes que ya no pueden ser salvados, realizada con técnicas modernas de anestesia para garantizar la comodidad total del paciente durante y después del procedimiento.',
-    popular: false,
-  },
-  {
-    key: 'evaluacion',
-    title: 'Evaluaciones Dentales',
-    short: 'Diagnóstico completo y plan de tratamiento a medida.',
-    desc: 'Consultas completas donde analizamos la salud bucal del paciente para definir el tratamiento más adecuado. Incluye examen clínico detallado, radiografías y plan personalizado.',
-    popular: false,
-  },
-  {
-    key: 'integral',
-    title: 'Atención Integral',
-    short: 'Cuidado personalizado pensado para cada paciente.',
-    desc: 'Cuidado dental integral enfocado en la comodidad y bienestar de cada paciente. Trato humano, cálido y profesional en cada visita, con soluciones adaptadas a cada necesidad bucal.',
-    popular: false,
-  },
+  { key: 'ortodoncia',     title: 'Ortodoncia',           short: 'Corregimos posición y mordida para una sonrisa perfecta.',    desc: 'Tratamientos especializados en corregir la posición de los dientes y la mordida para mejorar tanto la estética como la funcionalidad de la sonrisa. Incluye evaluaciones completas y seguimiento constante con especialista.', popular: true  },
+  { key: 'limpieza',       title: 'Limpiezas Dentales',   short: 'Profilaxis profunda para dientes sanos y brillantes.',         desc: 'Limpieza profunda que elimina placa y sarro, previniendo caries y enfermedades de encías. Dejamos tus dientes más sanos, limpios y brillantes desde la primera sesión.',                                                      popular: false },
+  { key: 'relleno',        title: 'Rellenos de Resina',   short: 'Restauramos dientes con materiales del color natural.',        desc: 'Tratamientos restaurativos que reparan dientes con caries o fracturas usando materiales del color del diente. Resultados estéticos y funcionales que nadie notará.',                                                           popular: false },
+  { key: 'blanqueamiento', title: 'Blanqueamiento Dental',short: 'Hasta 8 tonos más blanco en una sola sesión.',                 desc: 'Tratamiento estético que aclara el tono de los dientes para una sonrisa más radiante. Técnicas y materiales seguros con resultados visibles y naturales desde la primera cita.',                                              popular: true  },
+  { key: 'protesis',       title: 'Prótesis Dentales',    short: 'Soluciones fijas y removibles para dientes perdidos.',         desc: 'Sustituimos piezas dentales ausentes o dañadas con prótesis fijas o removibles de alta calidad, mejorando la función masticatoria y la estética dental de forma natural.',                                                  popular: false },
+  { key: 'extraccion',     title: 'Extracciones Dentales',short: 'Procedimiento seguro, rápido y sin dolor.',                    desc: 'Extracción de dientes que ya no pueden ser salvados, realizada con técnicas modernas de anestesia para garantizar la comodidad total del paciente durante y después del procedimiento.',                                    popular: false },
+  { key: 'evaluacion',     title: 'Evaluaciones Dentales',short: 'Diagnóstico completo y plan de tratamiento a medida.',         desc: 'Consultas completas donde analizamos la salud bucal del paciente para definir el tratamiento más adecuado. Incluye examen clínico detallado, radiografías y plan personalizado.',                                         popular: false },
+  { key: 'integral',       title: 'Atención Integral',    short: 'Cuidado personalizado pensado para cada paciente.',            desc: 'Cuidado dental integral enfocado en la comodidad y bienestar de cada paciente. Trato humano, cálido y profesional en cada visita, con soluciones adaptadas a cada necesidad bucal.',                                       popular: false },
 ];
 
-function ServiceCard({ service, delay, onContact }) {
-  const [hovered, setHovered] = useState(false);
+/* ─── En mobile las cards muestran el detalle al tocar (tap), no hover ─── */
+function ServiceCard({ service, delay, onContact, isMobile }) {
+  const [hovered,  setHovered]  = useState(false);
+  const [expanded, setExpanded] = useState(false); // solo mobile
   const col = COLORS[service.key];
+
+  const showOverlay = isMobile ? expanded : hovered;
+
+  const handleCardClick = () => {
+    if (isMobile) {
+      setExpanded(e => !e);
+    } else {
+      onContact();
+    }
+  };
 
   return (
     <div
       className={`fade-up stagger-${delay}`}
-      style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', cursor: 'pointer' }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onContact}
+      style={{ position: 'relative', borderRadius: '20px', overflow: 'hidden', cursor: 'pointer' }}
+      onMouseEnter={() => !isMobile && setHovered(true)}
+      onMouseLeave={() => !isMobile && setHovered(false)}
+      onClick={handleCardClick}
     >
-      <div
-        style={{
-          background: 'white',
-          borderRadius: '24px',
-          border: `1.5px solid ${hovered ? col.accent : 'rgba(0,0,0,0.06)'}`,
-          boxShadow: hovered
-            ? `0 20px 48px ${col.hover.replace('0.08', '0.18')}, 0 4px 16px rgba(0,0,0,0.08)`
-            : '0 2px 16px rgba(0,0,0,0.06)',
-          transition: 'all 0.35s cubic-bezier(0.34,1.26,0.64,1)',
-          transform: hovered ? 'translateY(-6px) scale(1.012)' : 'translateY(0) scale(1)',
-          overflow: 'hidden',
-          height: '100%',
-        }}
-      >
+      {/* Base card */}
+      <div style={{
+        background: 'white',
+        borderRadius: '20px',
+        border: `1.5px solid ${showOverlay ? col.accent : 'rgba(0,0,0,0.06)'}`,
+        boxShadow: showOverlay
+          ? `0 20px 48px ${col.hover.replace('0.08','0.18')}, 0 4px 16px rgba(0,0,0,0.08)`
+          : '0 2px 16px rgba(0,0,0,0.06)',
+        transition: 'all 0.35s cubic-bezier(0.34,1.26,0.64,1)',
+        transform: showOverlay && !isMobile ? 'translateY(-6px) scale(1.012)' : 'translateY(0) scale(1)',
+        overflow: 'hidden',
+        height: '100%',
+      }}>
+        {/* Icon area */}
         <div style={{
-          background: col.bg,
-          padding: '28px 28px 20px',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
+          background: col.bg, padding: '22px 22px 16px',
+          display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
         }}>
           <div style={{
-            width: '60px', height: '60px', borderRadius: '18px',
-            background: 'white',
+            width: '54px', height: '54px', borderRadius: '16px', background: 'white',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: `0 4px 16px ${col.hover.replace('0.08','0.2')}`,
           }}>
@@ -200,107 +160,86 @@ function ServiceCard({ service, delay, onContact }) {
               borderRadius: '999px', fontFamily: 'Poppins, sans-serif',
               background: `linear-gradient(135deg, ${col.accent}, #0E8C8F)`,
               color: 'white', letterSpacing: '0.03em',
-            }}>
-              Popular
-            </span>
+            }}>Popular</span>
           )}
         </div>
 
-        <div style={{ padding: '20px 24px 24px' }}>
-          <h3 style={{
-            fontFamily: 'Poppins, sans-serif', fontWeight: 700,
-            fontSize: '16px', color: '#1E1E1E', marginBottom: '8px',
-          }}>
+        {/* Text */}
+        <div style={{ padding: '16px 20px 20px' }}>
+          <h3 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '15px', color: '#1E1E1E', marginBottom: '6px' }}>
             {service.title}
           </h3>
-          <p style={{
-            fontFamily: 'Inter, sans-serif', fontSize: '13.5px',
-            color: '#6B7280', lineHeight: 1.65,
-          }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#6B7280', lineHeight: 1.65 }}>
             {service.short}
           </p>
           <div style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            marginTop: '16px', color: col.accent,
-            fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '13px',
+            display: 'flex', alignItems: 'center', gap: '5px', marginTop: '14px',
+            color: col.accent, fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '12.5px',
           }}>
-            Ver más
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5"
-              viewBox="0 0 24 24" style={{
-                transform: hovered ? 'translateX(4px)' : 'translateX(0)',
-                transition: 'transform 0.25s ease',
-              }}>
+            {isMobile ? (expanded ? 'Cerrar' : 'Ver más') : 'Ver más'}
+            <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
+              style={{ transform: showOverlay ? 'translateX(4px)' : 'translateX(0)', transition: 'transform 0.25s ease' }}>
               <line x1="5" y1="12" x2="19" y2="12"/>
               <polyline points="12 5 19 12 12 19"/>
             </svg>
           </div>
         </div>
+      </div>
 
-        {/* Hover overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '24px',
-            background: `linear-gradient(160deg, ${col.accent}F0 0%, #0a1e28F5 100%)`,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            padding: '32px 28px',
-            opacity: hovered ? 1 : 0,
-            transform: hovered ? 'translateY(0)' : 'translateY(12px)',
-            transition: 'opacity 0.32s ease, transform 0.32s ease',
-            pointerEvents: hovered ? 'auto' : 'none',
-          }}
-        >
-          <div style={{
-            width: '48px', height: '48px', borderRadius: '14px',
-            background: 'rgba(255,255,255,0.18)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            marginBottom: '16px',
-            backdropFilter: 'blur(4px)',
-          }}>
-            {icons[service.key]}
-          </div>
-          <h3 style={{
-            fontFamily: 'Poppins, sans-serif', fontWeight: 800,
-            fontSize: '17px', color: 'white', marginBottom: '12px', lineHeight: 1.2,
-          }}>
-            {service.title}
-          </h3>
-          <p style={{
-            fontFamily: 'Inter, sans-serif', fontSize: '13.5px',
-            color: 'rgba(255,255,255,0.88)', lineHeight: 1.7,
-            marginBottom: '24px',
-          }}>
-            {service.desc}
-          </p>
-          <button
-            style={{
-              background: 'white',
-              color: col.accent,
-              border: 'none',
-              borderRadius: '999px',
-              padding: '10px 22px',
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 700,
-              fontSize: '13px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
-              transition: 'transform 0.2s',
-            }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-            onClick={e => { e.stopPropagation(); onContact(); }}
-          >
-            <CheckCircle size={15} />
-            Agendar cita
-          </button>
+      {/* ── Overlay — hover en desktop, expandible en mobile ── */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: '20px',
+        background: `linear-gradient(160deg, ${col.accent}F0 0%, #0a1e28F5 100%)`,
+        display: 'flex', flexDirection: 'column',
+        justifyContent: isMobile ? 'flex-start' : 'center',
+        alignItems: 'flex-start',
+        padding: isMobile ? '20px 20px 20px' : '28px 24px',
+        opacity: showOverlay ? 1 : 0,
+        transform: showOverlay ? 'translateY(0)' : 'translateY(12px)',
+        transition: 'opacity 0.32s ease, transform 0.32s ease',
+        pointerEvents: showOverlay ? 'auto' : 'none',
+        overflowY: isMobile ? 'auto' : 'hidden',
+      }}>
+        <div style={{
+          width: '44px', height: '44px', borderRadius: '13px',
+          background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(4px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: '14px', flexShrink: 0,
+        }}>
+          {icons[service.key]}
         </div>
+        <h3 style={{
+          fontFamily: 'Poppins, sans-serif', fontWeight: 800,
+          fontSize: isMobile ? '15px' : '17px', color: 'white',
+          marginBottom: '10px', lineHeight: 1.2, flexShrink: 0,
+        }}>
+          {service.title}
+        </h3>
+        <p style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: isMobile ? '13px' : '13.5px',
+          color: 'rgba(255,255,255,0.88)', lineHeight: 1.7,
+          marginBottom: '20px', flexShrink: 0,
+        }}>
+          {service.desc}
+        </p>
+        <button
+          style={{
+            background: 'white', color: col.accent, border: 'none',
+            borderRadius: '999px', padding: '10px 20px',
+            fontFamily: 'Poppins, sans-serif', fontWeight: 700,
+            fontSize: '13px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '7px',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
+            width: isMobile ? '100%' : 'auto',
+            justifyContent: isMobile ? 'center' : 'flex-start',
+            flexShrink: 0,
+          }}
+          onClick={e => { e.stopPropagation(); onContact(); }}
+        >
+          <CheckCircle size={15} />
+          Agendar cita
+        </button>
       </div>
     </div>
   );
@@ -308,58 +247,77 @@ function ServiceCard({ service, delay, onContact }) {
 
 export default function Services() {
   const ref = useScrollAnimation();
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
   const goContact = () => navigate('/contacto');
+
+  // Detectar mobile para cambiar comportamiento tap vs hover
+  const [isMobile, setIsMobile] = useState(false);
+  useState(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  });
 
   return (
     <section id="servicios" className="section-padding" ref={ref}
       style={{ background: 'linear-gradient(180deg, #ffffff 0%, #F5F7F8 100%)', position: 'relative' }}
     >
+      <style>{`
+        .services-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+        }
+        @media (max-width: 1100px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px)  { .services-grid { grid-template-columns: 1fr; gap: 14px; } }
+        .services-title { font-size: clamp(1.6rem, 5vw, 2.8rem); }
+      `}</style>
+
       <div className="container-custom">
 
         {/* Header */}
-        <div className="text-center mb-20 fade-up">
+        <div className="text-center mb-14 fade-up">
           <span className="section-badge">Nuestros Servicios</span>
-          <h2 className="section-title mx-auto" style={{ marginTop: '8px' }}>
+          <h2 className="section-title services-title mx-auto" style={{ marginTop: '8px' }}>
             Soluciones para{' '}
             <span style={{ color: '#1FB6B9' }}>cada sonrisa</span>
           </h2>
           <p style={{
             fontFamily: 'Inter, sans-serif', color: '#6B7280',
-            maxWidth: '520px', margin: '0 auto', lineHeight: 1.7, fontSize: '15px',
+            maxWidth: '480px', margin: '0 auto', lineHeight: 1.7,
+            fontSize: 'clamp(13px, 3.5vw, 15px)',
           }}>
             Ofrecemos tratamientos personalizados de ortodoncia y odontología general.
           </p>
         </div>
 
         {/* Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-          gap: '20px',
-        }}>
+        <div className="services-grid">
           {SERVICES.map((service, i) => (
             <ServiceCard
               key={service.key}
               service={service}
               delay={Math.min(i + 1, 6)}
               onContact={goContact}
+              isMobile={isMobile}
             />
           ))}
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-24 fade-up">
-          <p style={{
-            fontFamily: 'Inter, sans-serif', color: '#9CA3AF',
-            fontSize: '14px', marginBottom: '20px',
-          }}>
+        <div className="text-center mt-16 fade-up">
+          <p style={{ fontFamily: 'Inter, sans-serif', color: '#9CA3AF', fontSize: '14px', marginBottom: '16px' }}>
             ¿No sabes cuál tratamiento necesitas?
           </p>
           <button
             className="btn-primary"
             onClick={goContact}
-            style={{ padding: '16px 36px', fontSize: '15px', gap: '10px' }}
+            style={{
+              padding: '14px 32px', fontSize: '15px', gap: '10px',
+              width: isMobile ? '100%' : 'auto',
+              justifyContent: 'center',
+            }}
           >
             <CheckCircle size={18} />
             Agenda una consulta gratuita
