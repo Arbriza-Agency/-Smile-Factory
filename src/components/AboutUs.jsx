@@ -55,114 +55,123 @@ function CinematicGallery() {
   }, [current, phase]);
 
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
+    <>
       <style>{`
         @keyframes kenburns {
           0%   { transform: scale(1) translateX(0%) translateY(0%); }
           100% { transform: scale(1.10) translateX(-1.5%) translateY(-1.5%); }
         }
-        /* En mobile la galería tiene ratio 4/3 en vez de 3/4 */
-        .cinematic-frame {
+        .gallery-wrapper {
+          position: relative;
+          width: 100%;
+          /* deja espacio abajo para que el badge no se corte */
+          padding-bottom: 60px;
+        }
+        .gallery-frame {
+          position: relative;
+          width: 100%;
           aspect-ratio: 3/4;
+          border-radius: 24px;
+          overflow: hidden;
+          box-shadow: 0 32px 64px rgba(14,140,143,0.22), 0 8px 24px rgba(0,0,0,0.10);
         }
         @media (max-width: 768px) {
-          .cinematic-frame {
+          .gallery-frame {
             aspect-ratio: 4/3;
+            border-radius: 18px;
           }
-          .floating-years {
-            left: 12px !important;
-            bottom: 16px !important;
-            padding: 10px 14px !important;
+          .gallery-wrapper {
+            padding-bottom: 50px;
+            /* sin padding-left en mobile */
+            padding-left: 0 !important;
           }
-          .floating-years .years-number {
-            font-size: 22px !important;
+        }
+        .floating-badge {
+          position: absolute;
+          bottom: 0;          /* siempre dentro del wrapper */
+          left: 16px;
+          background: linear-gradient(135deg, #0E8C8F, #1FB6B9);
+          border-radius: 18px;
+          padding: 14px 20px;
+          box-shadow: 0 12px 32px rgba(14,140,143,0.38);
+          z-index: 10;
+          color: white;
+          text-align: center;
+          pointer-events: none;
+        }
+        @media (max-width: 768px) {
+          .floating-badge {
+            left: 12px;
+            padding: 10px 16px;
+            border-radius: 14px;
           }
-          .floating-years .years-text {
-            font-size: 10px !important;
-          }
+          .floating-badge .badge-num  { font-size: 22px !important; }
+          .floating-badge .badge-text { font-size: 10px !important; }
         }
       `}</style>
 
-      {/* Main frame */}
-      <div
-        className="cinematic-frame"
-        style={{
-          position: 'relative',
-          width: '100%',
-          borderRadius: '24px',
-          overflow: 'hidden',
-          boxShadow: '0 32px 64px rgba(14,140,143,0.22), 0 8px 24px rgba(0,0,0,0.10)',
-        }}
-      >
-        {GALLERY.map(({ src, alt }, i) => {
-          const isActive = i === current;
-          const isPrev   = i === prev;
-          return (
-            <div
-              key={i}
-              style={{
-                position: 'absolute', inset: 0,
-                zIndex: isActive ? 2 : isPrev ? 1 : 0,
-                opacity: isActive ? (phase === 'fadeout' ? 0 : 1) : isPrev ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-              }}
-            >
-              <img
-                src={src} alt={alt}
+      <div className="gallery-wrapper">
+        {/* Frame con imágenes */}
+        <div className="gallery-frame">
+          {GALLERY.map(({ src, alt }, i) => {
+            const isActive = i === current;
+            const isPrev   = i === prev;
+            return (
+              <div
+                key={i}
                 style={{
-                  width: '100%', height: '100%',
-                  objectFit: 'cover', objectPosition: 'center', display: 'block',
-                  animation: isActive ? 'kenburns 6s ease-out forwards' : 'none',
+                  position: 'absolute', inset: 0,
+                  zIndex: isActive ? 2 : isPrev ? 1 : 0,
+                  opacity: isActive ? (phase === 'fadeout' ? 0 : 1) : isPrev ? 1 : 0,
+                  transition: 'opacity 0.8s ease-in-out',
                 }}
-              />
-            </div>
-          );
-        })}
+              >
+                <img
+                  src={src} alt={alt}
+                  style={{
+                    width: '100%', height: '100%',
+                    objectFit: 'cover', objectPosition: 'center',
+                    display: 'block',
+                    animation: isActive ? 'kenburns 6s ease-out forwards' : 'none',
+                  }}
+                />
+              </div>
+            );
+          })}
 
-        {/* Bottom gradient */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
-          background: 'linear-gradient(to top, rgba(8,24,34,0.55) 0%, transparent 100%)',
-          zIndex: 3, pointerEvents: 'none',
-        }} />
+          {/* Gradient bottom */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
+            background: 'linear-gradient(to top, rgba(8,24,34,0.55) 0%, transparent 100%)',
+            zIndex: 3, pointerEvents: 'none',
+          }} />
 
-        {/* Dots */}
-        <div style={{
-          position: 'absolute', bottom: '16px', left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex', gap: '7px', zIndex: 4,
-        }}>
-          {GALLERY.map((_, i) => (
-            <div key={i} style={{
-              width: i === current ? '20px' : '7px', height: '7px',
-              borderRadius: '999px',
-              background: i === current ? '#A8E6E7' : 'rgba(255,255,255,0.45)',
-              transition: 'all 0.4s ease',
-            }} />
-          ))}
+          {/* Dots */}
+          <div style={{
+            position: 'absolute', bottom: '14px', left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex', gap: '6px', zIndex: 4,
+          }}>
+            {GALLERY.map((_, i) => (
+              <div key={i} style={{
+                width: i === current ? '20px' : '6px', height: '6px',
+                borderRadius: '999px',
+                background: i === current ? '#A8E6E7' : 'rgba(255,255,255,0.45)',
+                transition: 'all 0.4s ease',
+              }} />
+            ))}
+          </div>
+        </div>
+
+        {/* Badge — fuera del frame, dentro del wrapper */}
+        <div className="floating-badge">
+          <div className="badge-num" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900, fontSize: '30px', lineHeight: 1 }}>12+</div>
+          <div className="badge-text" style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', opacity: 0.88, marginTop: '4px', lineHeight: 1.4 }}>
+            Años cuidando<br />sonrisas
+          </div>
         </div>
       </div>
-
-      {/* Floating card – years */}
-      <div
-        className="floating-years"
-        style={{
-          position: 'absolute',
-          bottom: '48px', left: '-24px',
-          background: 'linear-gradient(135deg, #0E8C8F, #1FB6B9)',
-          borderRadius: '18px',
-          padding: '14px 20px',
-          boxShadow: '0 16px 40px rgba(14,140,143,0.38)',
-          zIndex: 10, color: 'white', textAlign: 'center',
-          pointerEvents: 'none',
-        }}
-      >
-        <div className="years-number" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900, fontSize: '30px', lineHeight: 1 }}>12+</div>
-        <div className="years-text" style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', opacity: 0.88, marginTop: '4px', lineHeight: 1.4 }}>
-          Años cuidando<br />sonrisas
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -181,28 +190,24 @@ export default function AboutUs() {
       }}
     >
       <style>{`
-        /* Mobile adjustments */
         @media (max-width: 768px) {
           .about-grid {
             display: flex !important;
             flex-direction: column !important;
-            gap: 40px !important;
+            gap: 32px !important;
           }
-          .about-gallery-wrap {
-            padding-left: 16px !important;
-            padding-right: 8px !important;
-          }
-          .about-section-title {
-            font-size: clamp(1.6rem, 6vw, 2.4rem) !important;
-          }
+          .about-text-col { padding-left: 0 !important; }
           .about-cta {
             width: 100% !important;
             justify-content: center !important;
           }
+          .about-section-title {
+            font-size: clamp(1.5rem, 6vw, 2.2rem) !important;
+          }
         }
       `}</style>
 
-      {/* Decorative blobs */}
+      {/* Blobs decorativos */}
       <div style={{
         position: 'absolute', top: '-140px', right: '-140px',
         width: '500px', height: '500px', borderRadius: '50%',
@@ -218,32 +223,25 @@ export default function AboutUs() {
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
 
-        {/* Section header */}
+        {/* Header */}
         <div className="text-center mb-12 fade-up">
           <span className="section-badge">Sobre Nosotros</span>
-          <h2
-            className="section-title about-section-title"
-            style={{ marginTop: '8px' }}
-          >
+          <h2 className="section-title about-section-title" style={{ marginTop: '8px' }}>
             Más de una década<br />
             <span style={{ color: '#1FB6B9' }}>transformando sonrisas</span>
           </h2>
         </div>
 
-        {/* Grid — en mobile se convierte en columna */}
-        <div
-          className="about-grid grid lg:grid-cols-2 gap-16 items-center"
-        >
-          {/* Gallery — en mobile va primero y sin padding izquierdo exagerado */}
-          <div
-            className="fade-left about-gallery-wrap"
-            style={{ position: 'relative', paddingLeft: '24px' }}
-          >
+        {/* Grid */}
+        <div className="about-grid grid lg:grid-cols-2 gap-16 items-start">
+
+          {/* Galería */}
+          <div className="fade-left" style={{ paddingLeft: '24px' }}>
             <CinematicGallery />
           </div>
 
-          {/* Text */}
-          <div className="fade-right">
+          {/* Texto */}
+          <div className="fade-right about-text-col">
             <p className="section-subtitle mb-5" style={{ fontFamily: 'Inter, sans-serif', lineHeight: 1.78 }}>
               En Smile Factory combinamos experiencia clínica, tecnología de vanguardia
               y un equipo apasionado para ofrecerte la mejor atención dental. Creemos que
@@ -287,10 +285,7 @@ export default function AboutUs() {
                     {icon}
                   </div>
                   <div>
-                    <h4 style={{
-                      fontFamily: 'Poppins, sans-serif', fontWeight: 700,
-                      fontSize: '14px', color: '#1E1E1E', marginBottom: '4px',
-                    }}>
+                    <h4 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: '14px', color: '#1E1E1E', marginBottom: '4px' }}>
                       {title}
                     </h4>
                     <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#6B7280', lineHeight: 1.65 }}>
