@@ -61,35 +61,54 @@ function CinematicGallery() {
           0%   { transform: scale(1) translateX(0%) translateY(0%); }
           100% { transform: scale(1.10) translateX(-1.5%) translateY(-1.5%); }
         }
+
         .gallery-wrapper {
           position: relative;
           width: 100%;
-          /* deja espacio abajo para que el badge no se corte */
-          padding-bottom: 60px;
+          /* espacio inferior para que el badge que sobresale no tape el siguiente elemento */
+          padding-bottom: 24px;
         }
+
         .gallery-frame {
           position: relative;
           width: 100%;
           aspect-ratio: 3/4;
           border-radius: 24px;
-          overflow: hidden;
+          /* overflow visible para que el badge pueda sobresalir */
+          overflow: visible;
           box-shadow: 0 32px 64px rgba(14,140,143,0.22), 0 8px 24px rgba(0,0,0,0.10);
+          /* color de fondo mientras cargan las imágenes */
+          background: #C4EEEE;
         }
+
+        /* clip interno solo para las imágenes */
+        .gallery-inner-clip {
+          position: absolute;
+          inset: 0;
+          border-radius: 24px;
+          overflow: hidden;
+        }
+
         @media (max-width: 768px) {
           .gallery-frame {
             aspect-ratio: 4/3;
             border-radius: 18px;
+            min-height: 220px;
+          }
+          .gallery-inner-clip {
+            border-radius: 18px;
           }
           .gallery-wrapper {
-            padding-bottom: 50px;
-            /* sin padding-left en mobile */
             padding-left: 0 !important;
+            padding-bottom: 20px;
           }
         }
+
         .floating-badge {
           position: absolute;
-          bottom: 0;          /* siempre dentro del wrapper */
-          left: 16px;
+          /* anclado a la esquina inferior-izquierda del frame */
+          bottom: -18px;
+          left: 20px;
           background: linear-gradient(135deg, #0E8C8F, #1FB6B9);
           border-radius: 18px;
           padding: 14px 20px;
@@ -99,8 +118,10 @@ function CinematicGallery() {
           text-align: center;
           pointer-events: none;
         }
+
         @media (max-width: 768px) {
           .floating-badge {
+            bottom: -14px;
             left: 12px;
             padding: 10px 16px;
             border-radius: 14px;
@@ -111,64 +132,68 @@ function CinematicGallery() {
       `}</style>
 
       <div className="gallery-wrapper">
-        {/* Frame con imágenes */}
         <div className="gallery-frame">
-          {GALLERY.map(({ src, alt }, i) => {
-            const isActive = i === current;
-            const isPrev   = i === prev;
-            return (
-              <div
-                key={i}
-                style={{
-                  position: 'absolute', inset: 0,
-                  zIndex: isActive ? 2 : isPrev ? 1 : 0,
-                  opacity: isActive ? (phase === 'fadeout' ? 0 : 1) : isPrev ? 1 : 0,
-                  transition: 'opacity 0.8s ease-in-out',
-                }}
-              >
-                <img
-                  src={src} alt={alt}
+
+          {/* Contenedor con clip para las imágenes */}
+          <div className="gallery-inner-clip">
+            {GALLERY.map(({ src, alt }, i) => {
+              const isActive = i === current;
+              const isPrev   = i === prev;
+              return (
+                <div
+                  key={i}
                   style={{
-                    width: '100%', height: '100%',
-                    objectFit: 'cover', objectPosition: 'center',
-                    display: 'block',
-                    animation: isActive ? 'kenburns 6s ease-out forwards' : 'none',
+                    position: 'absolute', inset: 0,
+                    zIndex: isActive ? 2 : isPrev ? 1 : 0,
+                    opacity: isActive ? (phase === 'fadeout' ? 0 : 1) : isPrev ? 1 : 0,
+                    transition: 'opacity 0.8s ease-in-out',
                   }}
-                />
-              </div>
-            );
-          })}
+                >
+                  <img
+                    src={src} alt={alt}
+                    style={{
+                      width: '100%', height: '100%',
+                      objectFit: 'cover', objectPosition: 'center',
+                      display: 'block',
+                      animation: isActive ? 'kenburns 6s ease-out forwards' : 'none',
+                    }}
+                  />
+                </div>
+              );
+            })}
 
-          {/* Gradient bottom */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
-            background: 'linear-gradient(to top, rgba(8,24,34,0.55) 0%, transparent 100%)',
-            zIndex: 3, pointerEvents: 'none',
-          }} />
+            {/* Gradient bottom */}
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
+              background: 'linear-gradient(to top, rgba(8,24,34,0.55) 0%, transparent 100%)',
+              zIndex: 3, pointerEvents: 'none',
+            }} />
 
-          {/* Dots */}
-          <div style={{
-            position: 'absolute', bottom: '14px', left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex', gap: '6px', zIndex: 4,
-          }}>
-            {GALLERY.map((_, i) => (
-              <div key={i} style={{
-                width: i === current ? '20px' : '6px', height: '6px',
-                borderRadius: '999px',
-                background: i === current ? '#A8E6E7' : 'rgba(255,255,255,0.45)',
-                transition: 'all 0.4s ease',
-              }} />
-            ))}
+            {/* Dots */}
+            <div style={{
+              position: 'absolute', bottom: '14px', left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex', gap: '6px', zIndex: 4,
+            }}>
+              {GALLERY.map((_, i) => (
+                <div key={i} style={{
+                  width: i === current ? '20px' : '6px', height: '6px',
+                  borderRadius: '999px',
+                  background: i === current ? '#A8E6E7' : 'rgba(255,255,255,0.45)',
+                  transition: 'all 0.4s ease',
+                }} />
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Badge — fuera del frame, dentro del wrapper */}
-        <div className="floating-badge">
-          <div className="badge-num" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900, fontSize: '30px', lineHeight: 1 }}>12+</div>
-          <div className="badge-text" style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', opacity: 0.88, marginTop: '4px', lineHeight: 1.4 }}>
-            Años cuidando<br />sonrisas
+          {/* Badge — DENTRO del frame, posicionado relativo a él */}
+          <div className="floating-badge">
+            <div className="badge-num" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900, fontSize: '30px', lineHeight: 1 }}>12+</div>
+            <div className="badge-text" style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', opacity: 0.88, marginTop: '4px', lineHeight: 1.4 }}>
+              Años cuidando<br />sonrisas
+            </div>
           </div>
+
         </div>
       </div>
     </>
