@@ -14,7 +14,8 @@ const SERVICIOS_LINKS = [
   'Cirugía Dental',
   'Blanqueamiento',
   'Limpieza Dental',
-  'Carillas',
+  'Rellenos',
+  'Implantes Dentales',
 ];
 
 export default function Footer() {
